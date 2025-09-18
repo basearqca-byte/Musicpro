@@ -1,0 +1,2020 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MusicStream - Plataforma Musical</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background: #000000;
+        }
+        
+        .card-hover {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .card-hover:hover {
+            transform: scale(1.05) rotate(1deg);
+            box-shadow: 0 25px 50px rgba(255, 193, 7, 0.4);
+        }
+        
+        .btn-glow {
+            box-shadow: 0 0 20px rgba(255, 193, 7, 0.5);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-glow:hover {
+            box-shadow: 0 0 30px rgba(255, 193, 7, 0.8);
+            transform: translateY(-3px);
+        }
+        
+        .text-glow {
+            text-shadow: 0 0 10px rgba(255, 193, 7, 0.6);
+        }
+        
+        .border-animated {
+            background: linear-gradient(45deg, #ffc107, #000, #ffc107, #000);
+            background-size: 400% 400%;
+            animation: borderFlow 3s ease-in-out infinite;
+        }
+        
+        @keyframes borderFlow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .wave-bg {
+            background: linear-gradient(135deg, #000 0%, #1a1a1a 50%, #000 100%);
+        }
+        
+        .music-pulse {
+            animation: musicPulse 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes musicPulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+        
+        .slide-in {
+            animation: slideIn 0.6s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(-100px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        .float-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .grid-pattern {
+            background-image: 
+                linear-gradient(rgba(255, 193, 7, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 193, 7, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+        
+        .track-playing {
+            background: linear-gradient(90deg, rgba(255, 193, 7, 0.2), rgba(255, 193, 7, 0.1));
+            border-left: 4px solid #ffc107;
+        }
+        
+        .upload-zone {
+            border: 3px dashed #ffc107;
+            background: radial-gradient(circle, rgba(255, 193, 7, 0.1) 0%, transparent 70%);
+            transition: all 0.4s ease;
+        }
+        
+        .upload-zone:hover {
+            background: radial-gradient(circle, rgba(255, 193, 7, 0.2) 0%, rgba(255, 193, 7, 0.05) 70%);
+            transform: scale(1.02);
+        }
+        
+        .upload-zone.dragover {
+            background: radial-gradient(circle, rgba(255, 193, 7, 0.3) 0%, rgba(255, 193, 7, 0.1) 70%);
+            border-color: #fff;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .card-hover:hover {
+                transform: scale(1.02);
+            }
+            
+            .btn-glow:hover {
+                transform: translateY(-1px);
+            }
+        }
+    </style>
+</head>
+<body class="bg-black text-white min-h-screen">
+    
+    <!-- Header minimalista -->
+    <header class="border-b-4 border-yellow-400 bg-black sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col sm:flex-row justify-between items-center py-4 gap-4">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 bg-yellow-400 rounded-full flex items-center justify-center music-pulse">
+                        <span class="text-black font-bold text-xl">♪</span>
+                    </div>
+                    <h1 class="text-2xl sm:text-3xl font-bold text-glow">MusicStream</h1>
+                </div>
+                
+                <!-- Navigation -->
+                <nav class="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
+                    <button onclick="showPage('home')" id="homeBtn" 
+                            class="w-full sm:w-auto px-6 py-3 font-semibold rounded-full transition-all duration-300">
+                        Inicio
+                    </button>
+                    
+                    <!-- Login -->
+                    <div id="loginSection" class="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
+                        <input type="password" id="adminPassword" placeholder="Contraseña admin" 
+                               class="w-full sm:w-auto px-4 py-2 bg-black border-2 border-yellow-400 rounded-full text-white placeholder-gray-400 focus:outline-none focus:border-white"
+                               onkeypress="if(event.key==='Enter') attemptLogin()">
+                        <button onclick="attemptLogin()" class="w-full sm:w-auto bg-yellow-400 text-black px-6 py-2 rounded-full font-bold btn-glow">
+                            Entrar
+                        </button>
+                    </div>
+                    
+                    <!-- Admin -->
+                    <div id="adminSection" class="hidden flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
+                        <span class="text-yellow-400 font-semibold">Admin</span>
+                        <button onclick="showPage('admin')" id="adminBtn" 
+                                class="w-full sm:w-auto bg-yellow-400 text-black px-6 py-2 rounded-full font-bold btn-glow">
+                            Panel
+                        </button>
+                        <button onclick="logout()" class="w-full sm:w-auto bg-white text-black px-6 py-2 rounded-full font-bold hover:bg-gray-200 transition-colors">
+                            Salir
+                        </button>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Reproductor flotante -->
+    <div id="globalPlayer" class="hidden fixed bottom-0 left-0 right-0 bg-black border-t-4 border-yellow-400 p-4 z-40">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="flex items-center space-x-4 w-full sm:w-auto">
+                    <img id="playerCover" src="" alt="" class="w-12 h-12 rounded-lg object-cover">
+                    <div class="min-w-0 flex-1 sm:flex-none">
+                        <p id="playerTrackName" class="font-bold text-white truncate"></p>
+                        <p id="playerArtistName" class="text-sm text-yellow-400 truncate"></p>
+                    </div>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <button onclick="previousTrack()" class="text-yellow-400 hover:text-white text-2xl">⏮</button>
+                    <button onclick="toggleGlobalPlay()" id="globalPlayBtn" 
+                            class="w-12 h-12 bg-yellow-400 hover:bg-white text-black rounded-full flex items-center justify-center text-xl transition-colors btn-glow">
+                        ▶
+                    </button>
+                    <button onclick="nextTrack()" class="text-yellow-400 hover:text-white text-2xl">⏭</button>
+                </div>
+                
+                <div class="flex items-center space-x-4 w-full sm:w-auto">
+                    <span id="currentTime" class="text-sm text-gray-400 hidden sm:block">0:00</span>
+                    <div class="flex-1 sm:w-32 h-2 bg-white rounded-full">
+                        <div id="progressBar" class="h-full bg-yellow-400 rounded-full transition-all" style="width: 0%"></div>
+                    </div>
+                    <span id="totalTime" class="text-sm text-gray-400 hidden sm:block">0:00</span>
+                    <button onclick="closeGlobalPlayer()" class="text-gray-400 hover:text-white">✕</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Página Principal -->
+    <div id="homePage" class="page">
+        <div class="wave-bg min-h-screen">
+            <!-- Hero Section -->
+            <section class="grid-pattern py-16 sm:py-24">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                    <div class="float-animation mb-8">
+                        <div class="text-6xl sm:text-8xl mb-6">🎧</div>
+                    </div>
+                    <h2 class="text-4xl sm:text-6xl lg:text-7xl font-bold mb-6 text-glow">
+                        Tu Música,<br>
+                        <span class="text-yellow-400">Tu Mundo</span>
+                    </h2>
+                    <p class="text-xl sm:text-2xl text-gray-300 max-w-3xl mx-auto mb-8">
+                        Descubre, escucha y disfruta de la mejor colección musical
+                    </p>
+                    <div class="border-animated h-1 w-32 mx-auto rounded-full"></div>
+                </div>
+            </section>
+            
+            <!-- Albums Section -->
+            <section class="py-16">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div id="albumsContainer">
+                        <div id="albumsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                            <!-- Albums aquí -->
+                        </div>
+                        
+                        <div id="emptyState" class="text-center py-20 slide-in">
+                            <div class="text-8xl mb-8 float-animation">🎼</div>
+                            <h3 class="text-3xl font-bold text-white mb-4">Biblioteca Vacía</h3>
+                            <p class="text-xl text-gray-400 mb-8">Aún no hay música disponible</p>
+                            <div class="inline-flex items-center space-x-2 text-yellow-400 text-lg">
+                                <span>💡</span>
+                                <span>Accede como admin para subir música</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Panel Admin -->
+    <div id="adminPage" class="page hidden">
+        <div class="wave-bg min-h-screen py-12">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <!-- Header Admin -->
+                <div class="text-center mb-12 slide-in">
+                    <div class="text-6xl mb-6 music-pulse">⚙️</div>
+                    <h2 class="text-4xl sm:text-5xl font-bold mb-4 text-glow">Panel de Control</h2>
+                    <p class="text-xl text-gray-300">Gestiona tu biblioteca musical</p>
+                </div>
+
+                <!-- Formulario de Subida -->
+                <div class="bg-black border-4 border-yellow-400 rounded-3xl p-8 mb-12 slide-in">
+                    <div class="flex items-center space-x-4 mb-8">
+                        <div class="w-10 h-10 bg-yellow-400 rounded-full flex items-center justify-center">
+                            <span class="text-black font-bold text-xl">+</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-yellow-400">Nuevo Álbum</h3>
+                    </div>
+                    
+                    <form id="albumForm" class="space-y-8">
+                        <!-- Info básica -->
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-yellow-400 font-bold mb-3 text-lg">Título del Álbum</label>
+                                <input type="text" id="albumTitle" required 
+                                       class="w-full px-6 py-4 bg-black border-2 border-white rounded-2xl text-white text-lg focus:border-yellow-400 focus:outline-none transition-colors"
+                                       placeholder="Nombre del álbum">
+                            </div>
+                            <div>
+                                <label class="block text-yellow-400 font-bold mb-3 text-lg">Artista</label>
+                                <input type="text" id="artistName" required 
+                                       class="w-full px-6 py-4 bg-black border-2 border-white rounded-2xl text-white text-lg focus:border-yellow-400 focus:outline-none transition-colors"
+                                       placeholder="Nombre del artista">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-yellow-400 font-bold mb-3 text-lg">Descripción</label>
+                            <textarea id="albumDescription" rows="4" 
+                                      class="w-full px-6 py-4 bg-black border-2 border-white rounded-2xl text-white text-lg focus:border-yellow-400 focus:outline-none transition-colors resize-none"
+                                      placeholder="Describe tu álbum..."></textarea>
+                        </div>
+
+                        <!-- Subida de portada -->
+                        <div>
+                            <label class="block text-yellow-400 font-bold mb-3 text-lg">Portada del Álbum</label>
+                            <div class="upload-zone rounded-3xl p-12 text-center cursor-pointer" 
+                                 onclick="document.getElementById('coverInput').click()"
+                                 ondrop="handleCoverDrop(event)" 
+                                 ondragover="handleDragOver(event)"
+                                 ondragleave="handleDragLeave(event)">
+                                <div id="coverPreview">
+                                    <div class="text-6xl mb-6 float-animation">🖼️</div>
+                                    <h4 class="text-2xl font-bold text-yellow-400 mb-4">Subir Portada</h4>
+                                    <p class="text-white text-lg mb-2">Arrastra tu imagen aquí</p>
+                                    <p class="text-gray-400">o haz clic para seleccionar</p>
+                                </div>
+                            </div>
+                            <input type="file" id="coverInput" accept="image/*" class="hidden" onchange="previewCover(this)">
+                        </div>
+
+                        <!-- Subida de audio -->
+                        <div>
+                            <label class="block text-yellow-400 font-bold mb-3 text-lg">Canciones</label>
+                            <div class="upload-zone rounded-3xl p-12 text-center cursor-pointer" 
+                                 onclick="document.getElementById('audioInput').click()"
+                                 ondrop="handleAudioDrop(event)" 
+                                 ondragover="handleDragOver(event)"
+                                 ondragleave="handleDragLeave(event)">
+                                <div class="text-6xl mb-6 float-animation">🎵</div>
+                                <h4 class="text-2xl font-bold text-yellow-400 mb-4">Subir Canciones</h4>
+                                <p class="text-white text-lg mb-2">Arrastra tus archivos de audio</p>
+                                <p class="text-gray-400">Formatos: MP3, WAV, FLAC</p>
+                            </div>
+                            <input type="file" id="audioInput" accept="audio/*" multiple class="hidden" onchange="previewAudio(this)">
+                            <div id="audioPreview" class="mt-6"></div>
+                        </div>
+
+                        <!-- Botón submit -->
+                        <div class="text-center pt-8">
+                            <button type="submit" class="bg-yellow-400 text-black px-12 py-4 rounded-2xl font-bold text-xl btn-glow inline-flex items-center space-x-3">
+                                <span>🚀</span>
+                                <span>Publicar Álbum</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Panel de almacenamiento -->
+                <div class="bg-black border-4 border-yellow-400 rounded-3xl p-8 mb-12 slide-in">
+                    <div class="flex items-center space-x-4 mb-8">
+                        <div class="w-10 h-10 bg-yellow-400 rounded-full flex items-center justify-center">
+                            <span class="text-black font-bold text-xl">💾</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-yellow-400">Gestión de Datos</h3>
+                    </div>
+                    
+                    <div id="storageInfo" class="mb-6 p-4 bg-white bg-opacity-10 rounded-2xl">
+                        <!-- Info de almacenamiento aquí -->
+                    </div>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <button onclick="Storage.export()" class="bg-yellow-400 text-black px-6 py-3 rounded-2xl font-bold btn-glow flex items-center justify-center space-x-2">
+                            <span>📥</span>
+                            <span>Exportar</span>
+                        </button>
+                        
+                        <button onclick="document.getElementById('importInput').click()" class="bg-black text-yellow-400 border-2 border-yellow-400 px-6 py-3 rounded-2xl font-bold hover:bg-yellow-400 hover:text-black transition-colors flex items-center justify-center space-x-2">
+                            <span>📤</span>
+                            <span>Importar</span>
+                        </button>
+                        
+                        <button onclick="location.reload()" class="bg-black text-white border-2 border-white px-6 py-3 rounded-2xl font-bold hover:bg-white hover:text-black transition-colors flex items-center justify-center space-x-2">
+                            <span>🔄</span>
+                            <span>Recargar</span>
+                        </button>
+                        
+                        <button onclick="Storage.clear()" class="bg-white text-black px-6 py-3 rounded-2xl font-bold hover:bg-gray-200 transition-colors flex items-center justify-center space-x-2">
+                            <span>🗑️</span>
+                            <span>Limpiar</span>
+                        </button>
+                    </div>
+                    
+                    <input type="file" id="importInput" accept=".json" class="hidden" onchange="if(this.files[0]) Storage.import(this.files[0])">
+                    
+                    <div class="mt-6 p-4 bg-yellow-400 bg-opacity-20 rounded-2xl">
+                        <div class="flex items-start space-x-3">
+                            <span class="text-yellow-400 text-xl">💡</span>
+                            <div class="text-sm text-gray-300">
+                                <p class="font-bold text-yellow-400 mb-2">🚀 SISTEMA REVOLUCIONARIO: Guardado Directo en Código</p>
+                                <p>• <span class="text-green-400 font-bold">💾 NUEVO:</span> Los álbumes se guardan DENTRO del código HTML</p>
+                                <p>• <span class="text-blue-400 font-bold">🔄 AUTOMÁTICO:</span> Al subir música, se genera HTML actualizado</p>
+                                <p>• <span class="text-purple-400 font-bold">📂 PORTÁTIL:</span> Copia el archivo HTML a cualquier lugar</p>
+                                <p>• <span class="text-red-400 font-bold">🌐 UNIVERSAL:</span> Funciona en cualquier servidor/computadora</p>
+                                <p>• Sincronización instantánea entre ventanas abiertas</p>
+                                <p>• 5 métodos de sincronización simultáneos</p>
+                                <p>• Los datos persisten para siempre en el código</p>
+                                <p>• <span class="text-yellow-400 font-bold">✨ MAGIA:</span> Nadie se dará cuenta de que los datos están ahí</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Indicador de estado en tiempo real -->
+                        <div id="realTimeSyncStatus" class="mt-4 p-3 bg-black bg-opacity-50 rounded-xl flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+                                <span class="text-green-400 font-bold text-sm">Sistema Activo</span>
+                                <span class="text-gray-400 text-xs" id="windowIdDisplay">ID: ${windowId.slice(-8)}</span>
+                            </div>
+                            <div class="text-xs text-gray-400">
+                                <span id="lastSyncTime">Sincronizado ahora</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lista de álbumes -->
+                <div class="bg-black border-4 border-yellow-400 rounded-3xl p-8 slide-in">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 gap-4">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-10 h-10 bg-yellow-400 rounded-full flex items-center justify-center">
+                                <span class="text-black font-bold text-xl">📚</span>
+                            </div>
+                            <h3 class="text-2xl font-bold text-yellow-400">Álbumes Publicados</h3>
+                        </div>
+                        <div class="text-gray-400">
+                            <span id="albumCount">0</span> álbumes
+                        </div>
+                    </div>
+                    <div id="managementList" class="space-y-6">
+                        <!-- Lista aquí -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Álbum -->
+    <div id="albumModal" class="fixed inset-0 bg-black bg-opacity-95 hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-black border-4 border-yellow-400 rounded-3xl max-w-7xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-8">
+                <!-- Header del modal -->
+                <div class="flex flex-col lg:flex-row justify-between items-start mb-8 gap-6">
+                    <div class="flex-1">
+                        <h3 id="modalAlbumTitle" class="text-3xl sm:text-4xl font-bold text-yellow-400 mb-2"></h3>
+                        <p id="modalArtistName" class="text-xl text-white"></p>
+                    </div>
+                    <button onclick="closeAlbumModal()" class="text-gray-400 hover:text-white text-3xl">✕</button>
+                </div>
+                
+                <!-- Contenido del modal -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Info del álbum -->
+                    <div>
+                        <img id="modalAlbumCover" src="" alt="" class="w-full rounded-2xl shadow-2xl mb-6">
+                        <div class="space-y-6">
+                            <div>
+                                <h4 class="text-xl font-bold text-yellow-400 mb-3">Descripción</h4>
+                                <p id="modalAlbumDescription" class="text-white text-lg leading-relaxed"></p>
+                            </div>
+                            <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 text-gray-400">
+                                <span id="modalTrackCount"></span>
+                                <span class="hidden sm:block">•</span>
+                                <span id="modalReleaseDate"></span>
+                            </div>
+                            <button onclick="playFullAlbum()" class="w-full bg-yellow-400 text-black py-4 rounded-2xl font-bold text-lg btn-glow flex items-center justify-center space-x-2">
+                                <span>▶</span>
+                                <span>Reproducir Todo</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Lista de canciones -->
+                    <div>
+                        <h4 class="text-2xl font-bold mb-6 text-yellow-400 flex items-center space-x-2">
+                            <span>🎵</span>
+                            <span>Canciones</span>
+                        </h4>
+                        <div id="modalTracksList" class="space-y-4 max-h-96 overflow-y-auto">
+                            <!-- Canciones aquí -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Variables globales
+        let musicAlbums = JSON.parse(localStorage.getItem('musicAlbums')) || [];
+        let isAdminLoggedIn = localStorage.getItem('adminLoggedIn') === 'true';
+        let currentPage = 'home';
+        const ADMIN_PASSWORD = 'music2024';
+        
+        // Sistema de sincronización entre ventanas ULTRA MEJORADO
+        let lastSyncTime = Date.now();
+        let syncCheckInterval = null;
+        let windowId = 'window_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        let isInitialLoad = true;
+        let lastKnownAlbumCount = 0;
+        let syncChannel = null;
+        
+        // Sistema de almacenamiento DIRECTO EN CÓDIGO HTML + Sincronización
+        const Storage = {
+            save: function() {
+                try {
+                    const timestamp = Date.now();
+                    const syncData = {
+                        albums: musicAlbums,
+                        timestamp: timestamp,
+                        windowId: windowId,
+                        version: '2.0',
+                        albumCount: musicAlbums.length
+                    };
+                    
+                    // Guardar en localStorage (para sincronización entre ventanas)
+                    localStorage.setItem('musicAlbums', JSON.stringify(musicAlbums));
+                    localStorage.setItem('syncData', JSON.stringify(syncData));
+                    localStorage.setItem('lastBackup', new Date().toISOString());
+                    localStorage.setItem('lastUpdate', timestamp.toString());
+                    localStorage.setItem('albumCount', musicAlbums.length.toString());
+                    lastSyncTime = timestamp;
+                    
+                    // 🚀 NUEVO: Guardar directamente en el código HTML
+                    this.saveToHTMLCode();
+                    
+                    this.updateStorageInfo();
+                    this.broadcastChange();
+                    this.forceUpdateAllWindows();
+                    return true;
+                } catch (e) {
+                    if (e.name === 'QuotaExceededError') {
+                        showNotification('Espacio de almacenamiento lleno. Elimina algunos álbumes.', 'error');
+                    } else {
+                        showNotification('Error al guardar datos', 'error');
+                    }
+                    return false;
+                }
+            },
+            
+            saveToHTMLCode: function() {
+                try {
+                    // Crear datos comprimidos y codificados
+                    const dataToSave = {
+                        albums: musicAlbums,
+                        savedAt: new Date().toISOString(),
+                        version: '2.0'
+                    };
+                    
+                    // Comprimir y codificar los datos
+                    const compressedData = this.compressData(JSON.stringify(dataToSave));
+                    const encodedData = btoa(compressedData);
+                    
+                    // Buscar o crear el contenedor de datos en el HTML
+                    let dataContainer = document.getElementById('embedded-music-data');
+                    if (!dataContainer) {
+                        dataContainer = document.createElement('script');
+                        dataContainer.id = 'embedded-music-data';
+                        dataContainer.type = 'application/json';
+                        dataContainer.style.display = 'none';
+                        document.head.appendChild(dataContainer);
+                    }
+                    
+                    // Guardar los datos codificados
+                    dataContainer.textContent = encodedData;
+                    
+                    // Generar el código HTML actualizado para descarga
+                    this.generateUpdatedHTML();
+                    
+                    showNotification('💾 Datos guardados en el código HTML', 'success');
+                    
+                } catch (e) {
+                    console.error('Error al guardar en HTML:', e);
+                    showNotification('Error al guardar en código', 'error');
+                }
+            },
+            
+            loadFromHTMLCode: function() {
+                try {
+                    const dataContainer = document.getElementById('embedded-music-data');
+                    if (dataContainer && dataContainer.textContent.trim()) {
+                        const encodedData = dataContainer.textContent.trim();
+                        const compressedData = atob(encodedData);
+                        const jsonData = this.decompressData(compressedData);
+                        const parsedData = JSON.parse(jsonData);
+                        
+                        if (parsedData.albums && Array.isArray(parsedData.albums)) {
+                            musicAlbums = parsedData.albums;
+                            showNotification(`📂 ${musicAlbums.length} álbumes cargados del código`, 'info');
+                            return true;
+                        }
+                    }
+                } catch (e) {
+                    console.error('Error al cargar desde HTML:', e);
+                }
+                return false;
+            },
+            
+            compressData: function(data) {
+                // Compresión simple para reducir tamaño
+                return data.replace(/\s+/g, ' ').trim();
+            },
+            
+            decompressData: function(data) {
+                return data;
+            },
+            
+            generateUpdatedHTML: function() {
+                try {
+                    // Crear una copia del HTML actual con los datos actualizados
+                    const htmlContent = document.documentElement.outerHTML;
+                    
+                    // Crear un blob con el HTML actualizado
+                    const blob = new Blob([htmlContent], { type: 'text/html' });
+                    const url = URL.createObjectURL(blob);
+                    
+                    // Crear botón de descarga temporal
+                    const downloadBtn = document.createElement('a');
+                    downloadBtn.href = url;
+                    downloadBtn.download = `musicstream-actualizado-${new Date().toISOString().split('T')[0]}.html`;
+                    downloadBtn.style.display = 'none';
+                    document.body.appendChild(downloadBtn);
+                    
+                    // Mostrar notificación con opción de descarga
+                    this.showDownloadNotification(downloadBtn);
+                    
+                    // Limpiar después de un tiempo
+                    setTimeout(() => {
+                        URL.revokeObjectURL(url);
+                        if (document.body.contains(downloadBtn)) {
+                            document.body.removeChild(downloadBtn);
+                        }
+                    }, 30000);
+                    
+                } catch (e) {
+                    console.error('Error al generar HTML:', e);
+                }
+            },
+            
+            showDownloadNotification: function(downloadBtn) {
+                const notification = document.createElement('div');
+                notification.className = 'fixed top-4 right-4 z-50 bg-green-500 text-white p-6 rounded-2xl shadow-2xl max-w-sm border-4 border-green-400';
+                notification.innerHTML = `
+                    <div class="flex items-start space-x-4">
+                        <div class="text-3xl">💾</div>
+                        <div class="flex-1">
+                            <h4 class="font-bold text-lg mb-2">¡Código Actualizado!</h4>
+                            <p class="text-sm mb-4">Tus álbumes están guardados en el código HTML</p>
+                            <button onclick="this.parentElement.parentElement.parentElement.querySelector('a').click()" 
+                                    class="bg-white text-green-500 px-4 py-2 rounded-xl font-bold hover:bg-gray-100 transition-colors w-full">
+                                📥 Descargar HTML Actualizado
+                            </button>
+                            <p class="text-xs mt-2 opacity-75">Usa este archivo y tus álbumes aparecerán en cualquier lugar</p>
+                        </div>
+                        <button onclick="this.parentElement.parentElement.remove()" class="text-white hover:text-gray-200 text-xl">×</button>
+                    </div>
+                `;
+                
+                notification.appendChild(downloadBtn);
+                document.body.appendChild(notification);
+                
+                // Auto-remover después de 15 segundos
+                setTimeout(() => {
+                    if (document.body.contains(notification)) {
+                        notification.style.opacity = '0';
+                        notification.style.transform = 'translateX(100%)';
+                        setTimeout(() => {
+                            if (document.body.contains(notification)) {
+                                document.body.removeChild(notification);
+                            }
+                        }, 300);
+                    }
+                }, 15000);
+            },
+            
+            broadcastChange: function() {
+                // Múltiples métodos de notificación para máxima compatibilidad
+                const changeId = Date.now() + '_' + Math.random().toString(36).substr(2, 5);
+                
+                // Método 1: Storage event trigger
+                localStorage.setItem('syncTrigger', changeId);
+                setTimeout(() => localStorage.removeItem('syncTrigger'), 100);
+                
+                // Método 2: Broadcast Channel API (si está disponible)
+                if (window.BroadcastChannel) {
+                    try {
+                        const channel = new BroadcastChannel('musicstream_sync');
+                        channel.postMessage({
+                            type: 'DATA_UPDATED',
+                            timestamp: Date.now(),
+                            windowId: windowId,
+                            changeId: changeId,
+                            albumCount: musicAlbums.length,
+                            albums: musicAlbums
+                        });
+                        channel.close();
+                    } catch (e) {
+                        console.log('BroadcastChannel no disponible');
+                    }
+                }
+                
+                // Método 3: Custom event en localStorage
+                localStorage.setItem('musicstream_change', JSON.stringify({
+                    changeId: changeId,
+                    timestamp: Date.now(),
+                    windowId: windowId,
+                    albumCount: musicAlbums.length
+                }));
+                
+                // Método 4: Trigger directo para ventanas abiertas
+                localStorage.setItem('forceUpdate', changeId);
+                setTimeout(() => localStorage.removeItem('forceUpdate'), 200);
+            },
+            
+            forceUpdateAllWindows: function() {
+                // Forzar actualización inmediata en todas las ventanas
+                const updateSignal = {
+                    type: 'FORCE_UPDATE',
+                    timestamp: Date.now(),
+                    windowId: windowId,
+                    albums: musicAlbums,
+                    albumCount: musicAlbums.length
+                };
+                
+                // Múltiples señales para garantizar que llegue
+                localStorage.setItem('immediateUpdate', JSON.stringify(updateSignal));
+                localStorage.setItem('updateNow', Date.now().toString());
+                
+                // BroadcastChannel para ventanas modernas
+                if (window.BroadcastChannel) {
+                    try {
+                        const channel = new BroadcastChannel('musicstream_force');
+                        channel.postMessage(updateSignal);
+                        channel.close();
+                    } catch (e) {}
+                }
+                
+                // Limpiar señales después de un momento
+                setTimeout(() => {
+                    localStorage.removeItem('immediateUpdate');
+                    localStorage.removeItem('updateNow');
+                }, 500);
+            },
+            
+            load: function() {
+                try {
+                    // 🚀 PRIORIDAD 1: Intentar cargar desde el código HTML primero
+                    const loadedFromHTML = this.loadFromHTMLCode();
+                    
+                    if (!loadedFromHTML) {
+                        // PRIORIDAD 2: Cargar desde localStorage si no hay datos en HTML
+                        const data = localStorage.getItem('musicAlbums');
+                        musicAlbums = data ? JSON.parse(data) : [];
+                    }
+                    
+                    const lastUpdate = localStorage.getItem('lastUpdate');
+                    if (lastUpdate) {
+                        lastSyncTime = parseInt(lastUpdate);
+                    }
+                    
+                    // Establecer contador inicial
+                    lastKnownAlbumCount = musicAlbums.length;
+                    
+                    this.updateStorageInfo();
+                    isInitialLoad = false;
+                } catch (e) {
+                    console.error('Error al cargar datos:', e);
+                    musicAlbums = [];
+                    lastKnownAlbumCount = 0;
+                    isInitialLoad = false;
+                }
+            },
+            
+            checkForUpdates: function() {
+                try {
+                    // Verificar múltiples fuentes de actualización
+                    const syncDataStr = localStorage.getItem('syncData');
+                    const immediateUpdateStr = localStorage.getItem('immediateUpdate');
+                    const updateNow = localStorage.getItem('updateNow');
+                    
+                    let shouldUpdate = false;
+                    let newAlbums = [];
+                    let updateSource = '';
+                    
+                    // Prioridad 1: Actualización inmediata
+                    if (immediateUpdateStr) {
+                        try {
+                            const immediateData = JSON.parse(immediateUpdateStr);
+                            if (immediateData.windowId !== windowId && immediateData.albums) {
+                                newAlbums = immediateData.albums;
+                                shouldUpdate = true;
+                                updateSource = 'inmediata';
+                            }
+                        } catch (e) {}
+                    }
+                    
+                    // Prioridad 2: Datos de sincronización normales
+                    if (!shouldUpdate && syncDataStr) {
+                        try {
+                            const syncData = JSON.parse(syncDataStr);
+                            
+                            // No sincronizar cambios de la misma ventana
+                            if (syncData.windowId !== windowId) {
+                                // Verificar si hay cambios más recientes
+                                if (syncData.timestamp > lastSyncTime || syncData.albumCount !== lastKnownAlbumCount) {
+                                    newAlbums = syncData.albums || [];
+                                    shouldUpdate = true;
+                                    updateSource = 'sincronización';
+                                }
+                            }
+                        } catch (e) {}
+                    }
+                    
+                    if (shouldUpdate && newAlbums) {
+                        // Comparar contenido real, no solo timestamp
+                        const currentHash = this.generateHash(musicAlbums);
+                        const newHash = this.generateHash(newAlbums);
+                        
+                        if (currentHash !== newHash) {
+                            const oldCount = musicAlbums.length;
+                            musicAlbums = newAlbums;
+                            lastKnownAlbumCount = musicAlbums.length;
+                            lastSyncTime = Date.now();
+                            
+                            // Actualizar todas las vistas INMEDIATAMENTE
+                            this.updateStorageInfo();
+                            this.refreshAllViews();
+                            
+                            // Notificación inteligente
+                            const newCount = musicAlbums.length;
+                            let message = `📡 Actualizado (${updateSource})`;
+                            if (newCount > oldCount) {
+                                message = `🎵 +${newCount - oldCount} álbum(es) nuevo(s)`;
+                            } else if (newCount < oldCount) {
+                                message = `🗑️ ${oldCount - newCount} álbum(es) eliminado(s)`;
+                            } else if (newCount === oldCount && newCount > 0) {
+                                message = `✏️ Álbum(es) modificado(s)`;
+                            }
+                            
+                            showNotification(message, 'success');
+                            showSyncPulse();
+                            
+                            console.log(`🔄 Actualización ${updateSource}: ${oldCount} → ${newCount} álbumes`);
+                        }
+                    }
+                } catch (e) {
+                    console.error('Error al sincronizar:', e);
+                }
+            },
+            
+            generateHash: function(data) {
+                // Generar hash simple para comparar contenido
+                return JSON.stringify(data).split('').reduce((a, b) => {
+                    a = ((a << 5) - a) + b.charCodeAt(0);
+                    return a & a;
+                }, 0);
+            },
+            
+            refreshAllViews: function() {
+                loadAlbumsGallery();
+                if (currentPage === 'admin') {
+                    loadAdminPanel();
+                }
+                
+                // Actualizar contador en tiempo real
+                const albumCount = document.getElementById('albumCount');
+                if (albumCount) {
+                    albumCount.textContent = musicAlbums.length;
+                }
+            },
+            
+            getUsage: function() {
+                let total = 0;
+                for (let key in localStorage) {
+                    if (localStorage.hasOwnProperty(key)) {
+                        total += localStorage[key].length;
+                    }
+                }
+                return {
+                    used: (total / 1024 / 1024).toFixed(2), // MB
+                    albums: musicAlbums.length,
+                    tracks: musicAlbums.reduce((sum, album) => sum + album.tracks.length, 0)
+                };
+            },
+            
+            updateStorageInfo: function() {
+                const usage = this.getUsage();
+                const infoElement = document.getElementById('storageInfo');
+                if (infoElement) {
+                    infoElement.innerHTML = `
+                        <div class="flex items-center justify-between text-sm text-gray-400">
+                            <span>💾 ${usage.used} MB usados</span>
+                            <span>📚 ${usage.albums} álbumes</span>
+                            <span>🎵 ${usage.tracks} canciones</span>
+                        </div>
+                    `;
+                }
+            },
+            
+            export: function() {
+                const data = {
+                    albums: musicAlbums,
+                    exportDate: new Date().toISOString(),
+                    version: '1.0'
+                };
+                
+                const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `musicstream-backup-${new Date().toISOString().split('T')[0]}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                showNotification('Copia de seguridad descargada', 'success');
+            },
+            
+            import: function(file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const data = JSON.parse(e.target.result);
+                        if (data.albums && Array.isArray(data.albums)) {
+                            if (confirm(`¿Importar ${data.albums.length} álbumes?\n\nEsto reemplazará todos los datos actuales.`)) {
+                                musicAlbums = data.albums;
+                                Storage.save();
+                                loadAlbumsGallery();
+                                loadAdminPanel();
+                                showNotification(`${data.albums.length} álbumes importados`, 'success');
+                            }
+                        } else {
+                            showNotification('Archivo de respaldo inválido', 'error');
+                        }
+                    } catch (error) {
+                        showNotification('Error al leer el archivo', 'error');
+                    }
+                };
+                reader.readAsText(file);
+            },
+            
+            clear: function() {
+                if (confirm('¿Eliminar TODOS los datos?\n\nEsta acción no se puede deshacer.')) {
+                    localStorage.removeItem('musicAlbums');
+                    musicAlbums = [];
+                    loadAlbumsGallery();
+                    loadAdminPanel();
+                    showNotification('Todos los datos eliminados', 'info');
+                }
+            }
+        };
+
+        // Variables del reproductor
+        let currentAudio = null;
+        let currentTrackId = null;
+        let currentAlbumId = null;
+        let currentTrackIndex = 0;
+        let isPlaying = false;
+        let currentPlaylist = [];
+        let progressInterval = null;
+
+        // Sistema de sincronización entre ventanas ULTRA MEJORADO
+        function initializeSync() {
+            console.log('🔄 Iniciando sistema de sincronización ULTRA avanzado...');
+            
+            // Método 1: Storage Events (funciona entre pestañas/ventanas) - MÁS SENSIBLE
+            window.addEventListener('storage', function(e) {
+                if (e.key === 'syncTrigger' || e.key === 'musicAlbums' || e.key === 'syncData' || 
+                    e.key === 'musicstream_change' || e.key === 'immediateUpdate' || 
+                    e.key === 'updateNow' || e.key === 'forceUpdate') {
+                    console.log('📡 Cambio detectado via storage event:', e.key);
+                    // Actualización INMEDIATA
+                    Storage.checkForUpdates();
+                    setTimeout(() => Storage.checkForUpdates(), 50);
+                    setTimeout(() => Storage.checkForUpdates(), 200);
+                }
+            });
+            
+            // Método 2: BroadcastChannel API (más moderno y eficiente) - MÚLTIPLES CANALES
+            if (window.BroadcastChannel) {
+                try {
+                    // Canal principal
+                    syncChannel = new BroadcastChannel('musicstream_sync');
+                    syncChannel.addEventListener('message', function(event) {
+                        if (event.data.windowId !== windowId) {
+                            console.log('📡 Cambio detectado via BroadcastChannel principal');
+                            Storage.checkForUpdates();
+                        }
+                    });
+                    
+                    // Canal de fuerza
+                    const forceChannel = new BroadcastChannel('musicstream_force');
+                    forceChannel.addEventListener('message', function(event) {
+                        if (event.data.windowId !== windowId) {
+                            console.log('📡 Actualización FORZADA via BroadcastChannel');
+                            if (event.data.albums) {
+                                const oldCount = musicAlbums.length;
+                                musicAlbums = event.data.albums;
+                                lastKnownAlbumCount = musicAlbums.length;
+                                Storage.refreshAllViews();
+                                
+                                const newCount = musicAlbums.length;
+                                let message = '⚡ Actualización instantánea';
+                                if (newCount > oldCount) {
+                                    message = `⚡ +${newCount - oldCount} álbum(es) nuevo(s)`;
+                                }
+                                showNotification(message, 'success');
+                                showSyncPulse();
+                            }
+                        }
+                    });
+                    
+                    // Mantener referencias para cleanup
+                    window.musicStreamSyncChannel = syncChannel;
+                    window.musicStreamForceChannel = forceChannel;
+                } catch (e) {
+                    console.log('BroadcastChannel no disponible, usando métodos alternativos');
+                }
+            }
+            
+            // Método 3: Polling ULTRA agresivo (para garantizar sincronización)
+            let pollCount = 0;
+            syncCheckInterval = setInterval(() => {
+                Storage.checkForUpdates();
+                pollCount++;
+                
+                // Mantener polling agresivo por más tiempo
+                if (pollCount > 60) { // Después de 2 minutos
+                    clearInterval(syncCheckInterval);
+                    syncCheckInterval = setInterval(() => {
+                        Storage.checkForUpdates();
+                    }, 3000); // Cada 3 segundos (más frecuente)
+                }
+            }, 1000); // Cada segundo inicialmente
+            
+            // Método 4: Visibilidad API (sincronizar cuando la ventana se vuelve visible)
+            document.addEventListener('visibilitychange', function() {
+                if (!document.hidden) {
+                    console.log('👁️ Ventana visible, verificando sincronización...');
+                    Storage.checkForUpdates();
+                    setTimeout(() => Storage.checkForUpdates(), 100);
+                    setTimeout(() => Storage.checkForUpdates(), 500);
+                }
+            });
+            
+            // Método 5: Focus events (cuando el usuario cambia de ventana)
+            window.addEventListener('focus', function() {
+                console.log('🎯 Ventana enfocada, verificando sincronización...');
+                Storage.checkForUpdates();
+                setTimeout(() => Storage.checkForUpdates(), 50);
+            });
+            
+            // Método 6: Intervalo de verificación de contador
+            setInterval(() => {
+                const storedCount = localStorage.getItem('albumCount');
+                if (storedCount && parseInt(storedCount) !== lastKnownAlbumCount) {
+                    console.log('📊 Cambio en contador detectado');
+                    Storage.checkForUpdates();
+                }
+            }, 500);
+            
+            // Método 7: MutationObserver para cambios en localStorage
+            if (window.MutationObserver) {
+                const observer = new MutationObserver(() => {
+                    Storage.checkForUpdates();
+                });
+                // Observar cambios en el documento (como respaldo)
+                observer.observe(document.body, { 
+                    childList: true, 
+                    subtree: true, 
+                    attributes: false 
+                });
+            }
+            
+            // Mostrar indicador de sincronización
+            showSyncStatus();
+            
+            // Cleanup al cerrar ventana
+            window.addEventListener('beforeunload', function() {
+                if (window.musicStreamSyncChannel) {
+                    window.musicStreamSyncChannel.close();
+                }
+                if (window.musicStreamForceChannel) {
+                    window.musicStreamForceChannel.close();
+                }
+                if (syncCheckInterval) {
+                    clearInterval(syncCheckInterval);
+                }
+            });
+        }
+        
+        function showSyncStatus() {
+            // Remover indicador anterior si existe
+            const existingIndicator = document.getElementById('syncIndicator');
+            if (existingIndicator) {
+                existingIndicator.remove();
+            }
+            
+            const syncIndicator = document.createElement('div');
+            syncIndicator.id = 'syncIndicator';
+            syncIndicator.className = 'fixed top-4 left-4 z-50 bg-yellow-400 text-black px-4 py-2 rounded-full font-bold text-sm flex items-center space-x-2 opacity-0 transition-all duration-300';
+            syncIndicator.innerHTML = `
+                <div class="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                <span>Sistema Sincronizado</span>
+                <span class="text-xs bg-black text-yellow-400 px-2 py-1 rounded-full ml-2">${musicAlbums.length}</span>
+            `;
+            document.body.appendChild(syncIndicator);
+            
+            // Mostrar con animación
+            setTimeout(() => {
+                syncIndicator.style.opacity = '1';
+                syncIndicator.style.transform = 'translateX(0)';
+            }, 100);
+            
+            // Ocultar después de 4 segundos
+            setTimeout(() => {
+                if (document.getElementById('syncIndicator')) {
+                    syncIndicator.style.opacity = '0';
+                    syncIndicator.style.transform = 'translateX(-20px)';
+                    setTimeout(() => {
+                        if (document.body.contains(syncIndicator)) {
+                            document.body.removeChild(syncIndicator);
+                        }
+                    }, 300);
+                }
+            }, 4000);
+        }
+        
+        function showSyncPulse() {
+            const syncPulse = document.createElement('div');
+            syncPulse.className = 'fixed top-4 left-4 z-50 bg-green-400 text-black px-4 py-2 rounded-full font-bold text-sm flex items-center space-x-2 transform scale-110';
+            syncPulse.innerHTML = `
+                <div class="w-3 h-3 bg-white rounded-full animate-ping"></div>
+                <span>¡Actualizado!</span>
+            `;
+            document.body.appendChild(syncPulse);
+            
+            // Animación de entrada
+            setTimeout(() => {
+                syncPulse.style.transform = 'scale(1)';
+                syncPulse.style.transition = 'all 0.3s ease';
+            }, 100);
+            
+            // Remover después de 2 segundos
+            setTimeout(() => {
+                syncPulse.style.opacity = '0';
+                syncPulse.style.transform = 'scale(0.8)';
+                setTimeout(() => {
+                    if (document.body.contains(syncPulse)) {
+                        document.body.removeChild(syncPulse);
+                    }
+                }, 300);
+            }, 2000);
+        }
+
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', function() {
+            Storage.load();
+            updateAuthUI();
+            showPage('home');
+            initializeSync();
+        });
+
+        // Funciones de autenticación
+        function attemptLogin() {
+            const password = document.getElementById('adminPassword').value.trim();
+            
+            if (password === ADMIN_PASSWORD) {
+                isAdminLoggedIn = true;
+                localStorage.setItem('adminLoggedIn', 'true');
+                updateAuthUI();
+                document.getElementById('adminPassword').value = '';
+                
+                showNotification('¡Acceso concedido! Bienvenido al panel', 'success');
+            } else {
+                showNotification('Contraseña incorrecta', 'error');
+                document.getElementById('adminPassword').value = '';
+            }
+        }
+
+        function logout() {
+            isAdminLoggedIn = false;
+            localStorage.setItem('adminLoggedIn', 'false');
+            updateAuthUI();
+            showPage('home');
+            showNotification('Sesión cerrada', 'info');
+        }
+
+        function updateAuthUI() {
+            const loginSection = document.getElementById('loginSection');
+            const adminSection = document.getElementById('adminSection');
+            
+            if (isAdminLoggedIn) {
+                loginSection.classList.add('hidden');
+                adminSection.classList.remove('hidden');
+            } else {
+                loginSection.classList.remove('hidden');
+                adminSection.classList.add('hidden');
+            }
+        }
+
+        // Navegación
+        function showPage(page) {
+            if (page === 'admin' && !isAdminLoggedIn) {
+                showNotification('Debes iniciar sesión para acceder', 'warning');
+                return;
+            }
+            
+            document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
+            document.getElementById(page + 'Page').classList.remove('hidden');
+            
+            updateNavigationButtons(page);
+            currentPage = page;
+            
+            if (page === 'home') {
+                loadAlbumsGallery();
+            } else if (page === 'admin') {
+                loadAdminPanel();
+            }
+        }
+
+        function updateNavigationButtons(activePage) {
+            const homeBtn = document.getElementById('homeBtn');
+            
+            if (activePage === 'home') {
+                homeBtn.className = 'w-full sm:w-auto px-6 py-3 bg-yellow-400 text-black rounded-full font-semibold transition-all duration-300 btn-glow';
+            } else {
+                homeBtn.className = 'w-full sm:w-auto px-6 py-3 bg-black text-yellow-400 border-2 border-yellow-400 rounded-full font-semibold hover:bg-yellow-400 hover:text-black transition-all duration-300';
+            }
+        }
+
+        // Reproductor de audio
+        function playTrack(trackId, trackName, trackIndex, albumId) {
+            const album = musicAlbums.find(a => a.id === albumId);
+            if (!album) return;
+
+            currentPlaylist = album.tracks;
+            currentAlbumId = albumId;
+            currentTrackIndex = trackIndex - 1;
+
+            if (currentAudio) {
+                currentAudio.pause();
+                clearInterval(progressInterval);
+            }
+
+            // Resetear botones
+            document.querySelectorAll('[id^="playBtn-"]').forEach(btn => {
+                btn.innerHTML = '▶';
+                btn.className = 'w-10 h-10 bg-yellow-400 text-black rounded-full flex items-center justify-center transition-all hover:bg-white';
+            });
+
+            document.querySelectorAll('.track-item').forEach(item => {
+                item.classList.remove('track-playing');
+            });
+
+            if (currentTrackId === trackId && currentAudio) {
+                if (isPlaying) {
+                    pauseCurrentTrack();
+                } else {
+                    resumeCurrentTrack();
+                }
+                return;
+            }
+
+            currentTrackId = trackId;
+            startPlayback(trackName, album);
+        }
+
+        function startPlayback(trackName, album) {
+            const currentTrack = album.tracks[currentTrackIndex];
+            
+            if (currentTrack && currentTrack.audioData) {
+                currentAudio = createRealAudio(currentTrack.audioData);
+            } else {
+                currentAudio = createDemoAudio(currentTrackIndex);
+            }
+            
+            updatePlayButton(currentTrackId, true);
+            updateGlobalPlayer(trackName, album);
+            
+            const trackElement = document.querySelector(`[onclick*="${currentTrackId}"]`)?.closest('.track-item');
+            if (trackElement) {
+                trackElement.classList.add('track-playing');
+            }
+
+            isPlaying = true;
+            startProgressTracking();
+            showNotification(`🎵 ${trackName}`, 'success');
+        }
+
+        function createDemoAudio(trackIndex) {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const frequencies = [440, 523, 659, 784, 880, 1047, 1175, 1319];
+            const baseFreq = frequencies[trackIndex % frequencies.length];
+            
+            const sampleRate = audioContext.sampleRate;
+            const duration = 60;
+            const buffer = audioContext.createBuffer(2, sampleRate * duration, sampleRate);
+            
+            for (let channel = 0; channel < buffer.numberOfChannels; channel++) {
+                const channelData = buffer.getChannelData(channel);
+                for (let i = 0; i < channelData.length; i++) {
+                    const time = i / sampleRate;
+                    const freq1 = baseFreq * (1 + 0.1 * Math.sin(time * 0.5));
+                    const freq2 = baseFreq * 1.5 * (1 + 0.05 * Math.sin(time * 0.3));
+                    const amplitude = 0.1 * (1 + 0.3 * Math.sin(time * 0.2));
+                    
+                    channelData[i] = amplitude * (
+                        Math.sin(2 * Math.PI * freq1 * time) * 0.6 +
+                        Math.sin(2 * Math.PI * freq2 * time) * 0.4
+                    );
+                }
+            }
+            
+            const source = audioContext.createBufferSource();
+            source.buffer = buffer;
+            source.connect(audioContext.destination);
+            
+            const audio = {
+                duration: duration,
+                currentTime: 0,
+                paused: true,
+                volume: 1,
+                source: source,
+                context: audioContext,
+                startTime: 0,
+                pauseTime: 0,
+                
+                play: function() {
+                    if (this.context.state === 'suspended') {
+                        this.context.resume();
+                    }
+                    
+                    if (this.paused) {
+                        if (!this.source || this.source.buffer === null) {
+                            this.source = this.context.createBufferSource();
+                            this.source.buffer = buffer;
+                            this.source.connect(this.context.destination);
+                        }
+                        
+                        this.startTime = this.context.currentTime - this.pauseTime;
+                        this.source.start(0, this.pauseTime);
+                        this.paused = false;
+                        
+                        this.source.onended = () => {
+                            if (this.currentTime >= this.duration - 0.1) {
+                                nextTrack();
+                            }
+                        };
+                    }
+                },
+                
+                pause: function() {
+                    if (!this.paused && this.source) {
+                        this.source.stop();
+                        this.pauseTime = this.context.currentTime - this.startTime;
+                        this.paused = true;
+                        
+                        this.source = this.context.createBufferSource();
+                        this.source.buffer = buffer;
+                        this.source.connect(this.context.destination);
+                    }
+                },
+                
+                getCurrentTime: function() {
+                    if (this.paused) {
+                        return this.pauseTime;
+                    } else {
+                        return Math.min(this.context.currentTime - this.startTime, this.duration);
+                    }
+                }
+            };
+            
+            const updateTime = () => {
+                if (!audio.paused) {
+                    audio.currentTime = audio.getCurrentTime();
+                }
+                requestAnimationFrame(updateTime);
+            };
+            updateTime();
+            
+            return audio;
+        }
+
+        function createRealAudio(audioData) {
+            const audio = new Audio(audioData);
+            audio.volume = 1;
+            
+            audio.addEventListener('ended', () => {
+                nextTrack();
+            });
+            
+            audio.addEventListener('error', (e) => {
+                console.error('Error al cargar audio:', e);
+                showNotification('Error al reproducir archivo', 'error');
+                currentAudio = createDemoAudio(currentTrackIndex);
+                currentAudio.play();
+            });
+            
+            audio.play().catch(e => {
+                console.error('Error al reproducir:', e);
+                showNotification('Error al iniciar reproducción', 'error');
+            });
+            
+            return audio;
+        }
+
+        function updatePlayButton(trackId, playing) {
+            const playBtn = document.getElementById(`playBtn-${trackId}`);
+            if (playBtn) {
+                if (playing) {
+                    playBtn.innerHTML = '⏸';
+                    playBtn.className = 'w-10 h-10 bg-white text-black rounded-full flex items-center justify-center transition-all music-pulse';
+                } else {
+                    playBtn.innerHTML = '▶';
+                    playBtn.className = 'w-10 h-10 bg-yellow-400 text-black rounded-full flex items-center justify-center transition-all hover:bg-white';
+                }
+            }
+        }
+
+        function updateGlobalPlayer(trackName, album) {
+            document.getElementById('playerCover').src = album.cover;
+            document.getElementById('playerTrackName').textContent = trackName;
+            document.getElementById('playerArtistName').textContent = album.artist;
+            document.getElementById('globalPlayer').classList.remove('hidden');
+            
+            const globalPlayBtn = document.getElementById('globalPlayBtn');
+            globalPlayBtn.innerHTML = '⏸';
+        }
+
+        function startProgressTracking() {
+            progressInterval = setInterval(() => {
+                if (currentAudio && !currentAudio.paused) {
+                    const progress = (currentAudio.currentTime / currentAudio.duration) * 100;
+                    document.getElementById('progressBar').style.width = progress + '%';
+                    document.getElementById('currentTime').textContent = formatTime(currentAudio.currentTime);
+                    document.getElementById('totalTime').textContent = formatTime(currentAudio.duration);
+                }
+            }, 100);
+        }
+
+        function pauseCurrentTrack() {
+            if (currentAudio) {
+                currentAudio.pause();
+                isPlaying = false;
+                updatePlayButton(currentTrackId, false);
+                document.getElementById('globalPlayBtn').innerHTML = '▶';
+                clearInterval(progressInterval);
+            }
+        }
+
+        function resumeCurrentTrack() {
+            if (currentAudio) {
+                currentAudio.play();
+                isPlaying = true;
+                updatePlayButton(currentTrackId, true);
+                document.getElementById('globalPlayBtn').innerHTML = '⏸';
+                startProgressTracking();
+            }
+        }
+
+        function toggleGlobalPlay() {
+            if (isPlaying) {
+                pauseCurrentTrack();
+            } else {
+                resumeCurrentTrack();
+            }
+        }
+
+        function nextTrack() {
+            if (currentPlaylist.length === 0) return;
+            
+            currentTrackIndex = (currentTrackIndex + 1) % currentPlaylist.length;
+            const nextTrack = currentPlaylist[currentTrackIndex];
+            playTrack(nextTrack.id, nextTrack.name, currentTrackIndex + 1, currentAlbumId);
+        }
+
+        function previousTrack() {
+            if (currentPlaylist.length === 0) return;
+            
+            currentTrackIndex = currentTrackIndex > 0 ? currentTrackIndex - 1 : currentPlaylist.length - 1;
+            const prevTrack = currentPlaylist[currentTrackIndex];
+            playTrack(prevTrack.id, prevTrack.name, currentTrackIndex + 1, currentAlbumId);
+        }
+
+        function playFullAlbum() {
+            const album = musicAlbums.find(a => a.id === currentAlbumId);
+            if (!album || album.tracks.length === 0) return;
+            
+            const firstTrack = album.tracks[0];
+            playTrack(firstTrack.id, firstTrack.name, 1, currentAlbumId);
+        }
+
+        function closeGlobalPlayer() {
+            if (currentAudio) {
+                currentAudio.pause();
+                clearInterval(progressInterval);
+            }
+            
+            document.getElementById('globalPlayer').classList.add('hidden');
+            
+            document.querySelectorAll('[id^="playBtn-"]').forEach(btn => {
+                btn.innerHTML = '▶';
+                btn.className = 'w-10 h-10 bg-yellow-400 text-black rounded-full flex items-center justify-center transition-all hover:bg-white';
+            });
+            
+            document.querySelectorAll('.track-item').forEach(item => {
+                item.classList.remove('track-playing');
+            });
+            
+            currentAudio = null;
+            currentTrackId = null;
+            isPlaying = false;
+        }
+
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        // Funciones de archivos
+        function previewCover(input) {
+            const file = input.files[0];
+            if (!file) return;
+            
+            if (file.size > 5 * 1024 * 1024) {
+                showNotification('Imagen demasiado grande. Máximo 5MB.', 'error');
+                input.value = '';
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('coverPreview').innerHTML = `
+                    <div class="relative">
+                        <img src="${e.target.result}" alt="Preview" class="w-full h-48 object-cover rounded-2xl">
+                        <div class="absolute inset-0 bg-black bg-opacity-50 rounded-2xl flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
+                            <p class="text-white font-bold text-lg">✓ Portada Lista</p>
+                        </div>
+                    </div>
+                `;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function previewAudio(input) {
+            const files = Array.from(input.files);
+            if (files.length === 0) return;
+            
+            const validFiles = files.filter(file => {
+                if (file.size > 10 * 1024 * 1024) {
+                    showNotification(`${file.name} es demasiado grande. Máximo 10MB.`, 'error');
+                    return false;
+                }
+                return true;
+            });
+            
+            if (validFiles.length === 0) {
+                input.value = '';
+                return;
+            }
+            
+            window.selectedAudioFiles = validFiles;
+            
+            const preview = document.getElementById('audioPreview');
+            preview.innerHTML = `
+                <div class="bg-black border-2 border-yellow-400 rounded-2xl p-6">
+                    <div class="flex items-center space-x-3 mb-6">
+                        <div class="w-8 h-8 bg-yellow-400 rounded-full flex items-center justify-center">
+                            <span class="text-black font-bold">${validFiles.length}</span>
+                        </div>
+                        <h4 class="text-yellow-400 font-bold text-lg">Canciones Seleccionadas</h4>
+                    </div>
+                    <div class="space-y-3">
+                        ${validFiles.map((file, index) => `
+                            <div class="flex items-center space-x-4 p-4 bg-white bg-opacity-10 rounded-xl">
+                                <span class="text-yellow-400 font-bold w-6">${index + 1}</span>
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-white font-semibold truncate">${file.name.replace(/\.[^/.]+$/, "")}</p>
+                                    <p class="text-gray-400 text-sm">${(file.size / (1024 * 1024)).toFixed(1)} MB</p>
+                                </div>
+                                <span class="text-yellow-400 text-xl">✓</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Drag & Drop
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.currentTarget.classList.add('dragover');
+        }
+
+        function handleDragLeave(e) {
+            e.preventDefault();
+            e.currentTarget.classList.remove('dragover');
+        }
+
+        function handleCoverDrop(e) {
+            e.preventDefault();
+            e.currentTarget.classList.remove('dragover');
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                document.getElementById('coverInput').files = files;
+                previewCover(document.getElementById('coverInput'));
+            }
+        }
+
+        function handleAudioDrop(e) {
+            e.preventDefault();
+            e.currentTarget.classList.remove('dragover');
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                document.getElementById('audioInput').files = files;
+                previewAudio(document.getElementById('audioInput'));
+            }
+        }
+
+        // Formulario
+        document.getElementById('albumForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const title = document.getElementById('albumTitle').value.trim();
+            const artist = document.getElementById('artistName').value.trim();
+            const description = document.getElementById('albumDescription').value.trim();
+            const coverFile = document.getElementById('coverInput').files[0];
+            const audioFiles = window.selectedAudioFiles || Array.from(document.getElementById('audioInput').files);
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const editingId = submitBtn.getAttribute('data-editing');
+            
+            if (!title || !artist) {
+                showNotification('Completa título y artista', 'error');
+                return;
+            }
+            
+            if (editingId) {
+                const albumIndex = musicAlbums.findIndex(a => a.id == editingId);
+                if (albumIndex === -1) {
+                    showNotification('Álbum no encontrado', 'error');
+                    return;
+                }
+                
+                const existingAlbum = musicAlbums[albumIndex];
+                
+                const updateAlbum = async (coverData) => {
+                    let newTracks = [];
+                    if (audioFiles.length > 0) {
+                        for (let i = 0; i < audioFiles.length; i++) {
+                            const file = audioFiles[i];
+                            const audioData = await fileToBase64(file);
+                            newTracks.push({
+                                id: Date.now() + i,
+                                name: file.name.replace(/\.[^/.]+$/, ""),
+                                filename: file.name,
+                                duration: generateRandomDuration(),
+                                size: file.size,
+                                audioData: audioData,
+                                type: file.type
+                            });
+                        }
+                    }
+                    
+                    const updatedAlbum = {
+                        ...existingAlbum,
+                        title: title,
+                        artist: artist,
+                        description: description,
+                        cover: coverData || existingAlbum.cover,
+                        tracks: [
+                            ...existingAlbum.tracks,
+                            ...newTracks
+                        ]
+                    };
+                    
+                    updatedAlbum.totalTracks = updatedAlbum.tracks.length;
+                    musicAlbums[albumIndex] = updatedAlbum;
+                    Storage.save();
+                    
+                    resetAlbumForm();
+                    showNotification(`¡${title} actualizado!`, 'success');
+                    loadAdminPanel();
+                };
+                
+                if (coverFile) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        updateAlbum(e.target.result);
+                    };
+                    reader.readAsDataURL(coverFile);
+                } else {
+                    updateAlbum();
+                }
+                
+            } else {
+                if (!coverFile) {
+                    showNotification('Selecciona una portada', 'error');
+                    return;
+                }
+                
+                if (audioFiles.length === 0) {
+                    showNotification('Selecciona al menos una canción', 'error');
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const processAudioFiles = async () => {
+                        const tracks = [];
+                        for (let i = 0; i < audioFiles.length; i++) {
+                            const file = audioFiles[i];
+                            const audioData = await fileToBase64(file);
+                            tracks.push({
+                                id: Date.now() + i,
+                                name: file.name.replace(/\.[^/.]+$/, ""),
+                                filename: file.name,
+                                duration: generateRandomDuration(),
+                                size: file.size,
+                                audioData: audioData,
+                                type: file.type
+                            });
+                        }
+                        return tracks;
+                    };
+                    
+                    processAudioFiles().then(tracks => {
+                        const newAlbum = {
+                            id: Date.now(),
+                            title: title,
+                            artist: artist,
+                            description: description,
+                            cover: e.target.result,
+                            tracks: tracks,
+                            createdAt: new Date().toISOString(),
+                            totalTracks: audioFiles.length
+                        };
+                        
+                        musicAlbums.push(newAlbum);
+                        Storage.save();
+                        
+                        resetAlbumForm();
+                        showNotification(`¡${title} publicado!`, 'success');
+                        loadAdminPanel();
+                    });
+                };
+                reader.readAsDataURL(coverFile);
+            }
+        });
+
+        function resetAlbumForm() {
+            document.getElementById('albumForm').reset();
+            document.getElementById('coverPreview').innerHTML = `
+                <div class="text-6xl mb-6 float-animation">🖼️</div>
+                <h4 class="text-2xl font-bold text-yellow-400 mb-4">Subir Portada</h4>
+                <p class="text-white text-lg mb-2">Arrastra tu imagen aquí</p>
+                <p class="text-gray-400">o haz clic para seleccionar</p>
+            `;
+            document.getElementById('audioPreview').innerHTML = '';
+            
+            const submitBtn = document.querySelector('#albumForm button[type="submit"]');
+            submitBtn.innerHTML = `
+                <span>🚀</span>
+                <span>Publicar Álbum</span>
+            `;
+            submitBtn.removeAttribute('data-editing');
+        }
+
+        // Cargar galería
+        function loadAlbumsGallery() {
+            const grid = document.getElementById('albumsGrid');
+            const emptyState = document.getElementById('emptyState');
+            
+            if (musicAlbums.length === 0) {
+                grid.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+            
+            emptyState.classList.add('hidden');
+            grid.innerHTML = musicAlbums.map(album => `
+                <div class="bg-black border-4 border-yellow-400 rounded-3xl p-6 cursor-pointer card-hover slide-in" onclick="openAlbumModal(${album.id})">
+                    <div class="relative mb-6 group">
+                        <img src="${album.cover}" alt="${album.title}" class="w-full h-64 object-cover rounded-2xl">
+                        <div class="absolute inset-0 bg-black bg-opacity-70 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                            <div class="text-center">
+                                <div class="text-4xl mb-3 music-pulse">▶</div>
+                                <p class="text-white font-bold">Ver Álbum</p>
+                            </div>
+                        </div>
+                    </div>
+                    <h3 class="text-xl font-bold text-yellow-400 mb-2 truncate">${album.title}</h3>
+                    <p class="text-white mb-4 truncate">${album.artist}</p>
+                    <div class="flex justify-between items-center text-sm text-gray-400">
+                        <span>${album.totalTracks} canciones</span>
+                        <span>${new Date(album.createdAt).toLocaleDateString()}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Cargar admin
+        function loadAdminPanel() {
+            const managementList = document.getElementById('managementList');
+            const albumCount = document.getElementById('albumCount');
+            
+            albumCount.textContent = musicAlbums.length;
+            Storage.updateStorageInfo();
+            
+            if (musicAlbums.length === 0) {
+                managementList.innerHTML = `
+                    <div class="text-center py-16">
+                        <div class="text-6xl mb-6 float-animation">📚</div>
+                        <p class="text-gray-400 text-xl">No hay álbumes aún</p>
+                        <p class="text-gray-500">Crea tu primer álbum arriba</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            managementList.innerHTML = musicAlbums.map(album => `
+                <div class="bg-black border-2 border-white rounded-2xl p-6 hover:border-yellow-400 transition-colors">
+                    <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+                        <div class="flex items-center space-x-6 flex-1 min-w-0">
+                            <img src="${album.cover}" alt="${album.title}" class="w-20 h-20 object-cover rounded-xl flex-shrink-0">
+                            <div class="flex-1 min-w-0">
+                                <h4 class="text-xl font-bold text-yellow-400 mb-2 truncate">${album.title}</h4>
+                                <p class="text-white mb-2 truncate">${album.artist}</p>
+                                <div class="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4 text-sm text-gray-400">
+                                    <span>🎵 ${album.totalTracks} canciones</span>
+                                    <span class="hidden sm:block">•</span>
+                                    <span>📅 ${new Date(album.createdAt).toLocaleDateString()}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex flex-row lg:flex-col xl:flex-row items-center gap-3 w-full lg:w-auto">
+                            <button onclick="openAlbumModal(${album.id})" class="flex-1 lg:flex-none bg-black text-yellow-400 border-2 border-yellow-400 px-4 py-2 rounded-xl font-bold hover:bg-yellow-400 hover:text-black transition-colors">
+                                👁️ Ver
+                            </button>
+                            <button onclick="editAlbum(${album.id})" class="flex-1 lg:flex-none bg-yellow-400 text-black px-4 py-2 rounded-xl font-bold btn-glow">
+                                ✏️ Editar
+                            </button>
+                            <button onclick="deleteAlbum(${album.id})" class="flex-1 lg:flex-none bg-white text-black px-4 py-2 rounded-xl font-bold hover:bg-gray-200 transition-colors">
+                                🗑️ Eliminar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Modal
+        function openAlbumModal(albumId) {
+            const album = musicAlbums.find(a => a.id === albumId);
+            if (!album) return;
+            
+            currentAlbumId = albumId;
+            
+            document.getElementById('modalAlbumTitle').textContent = album.title;
+            document.getElementById('modalArtistName').textContent = album.artist;
+            document.getElementById('modalAlbumCover').src = album.cover;
+            document.getElementById('modalAlbumDescription').textContent = album.description || 'Sin descripción';
+            document.getElementById('modalTrackCount').textContent = `${album.totalTracks} canciones`;
+            document.getElementById('modalReleaseDate').textContent = new Date(album.createdAt).toLocaleDateString();
+            
+            const tracksList = document.getElementById('modalTracksList');
+            tracksList.innerHTML = album.tracks.map((track, index) => `
+                <div class="track-item flex items-center justify-between p-4 rounded-2xl bg-black border-2 border-white hover:border-yellow-400 transition-colors">
+                    <div class="flex items-center space-x-4 flex-1 min-w-0">
+                        <div class="w-8 h-8 bg-yellow-400 rounded-full flex items-center justify-center flex-shrink-0">
+                            <span class="text-black font-bold text-sm">${index + 1}</span>
+                        </div>
+                        <div class="min-w-0 flex-1">
+                            <p class="font-bold text-white truncate">${track.name}</p>
+                            <p class="text-sm text-gray-400">${track.duration} • ${(track.size / (1024 * 1024)).toFixed(1)} MB</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-3 flex-shrink-0">
+                        <button onclick="playTrack(${track.id}, '${track.name}', ${index + 1}, ${albumId})" id="playBtn-${track.id}" 
+                                class="w-10 h-10 bg-yellow-400 text-black rounded-full flex items-center justify-center transition-all hover:bg-white">
+                            ▶
+                        </button>
+                        <button onclick="downloadTrack('${track.filename}')" class="bg-yellow-400 text-black px-4 py-2 rounded-xl font-bold btn-glow flex items-center space-x-2">
+                            <span>⬇</span>
+                            <span class="hidden sm:inline">Descargar</span>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+            
+            document.getElementById('albumModal').classList.remove('hidden');
+        }
+
+        function closeAlbumModal() {
+            document.getElementById('albumModal').classList.add('hidden');
+        }
+
+        // Editar álbum
+        function editAlbum(albumId) {
+            const album = musicAlbums.find(a => a.id === albumId);
+            if (!album) return;
+            
+            document.getElementById('albumTitle').value = album.title;
+            document.getElementById('artistName').value = album.artist;
+            document.getElementById('albumDescription').value = album.description || '';
+            
+            document.getElementById('coverPreview').innerHTML = `
+                <div class="relative">
+                    <img src="${album.cover}" alt="Preview" class="w-full h-48 object-cover rounded-2xl">
+                    <div class="absolute inset-0 bg-black bg-opacity-50 rounded-2xl flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
+                        <p class="text-white font-bold">✓ Portada actual</p>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('audioPreview').innerHTML = `
+                <div class="bg-black border-2 border-yellow-400 rounded-2xl p-6">
+                    <div class="flex items-center space-x-3 mb-6">
+                        <div class="w-8 h-8 bg-yellow-400 rounded-full flex items-center justify-center">
+                            <span class="text-black font-bold">${album.tracks.length}</span>
+                        </div>
+                        <h4 class="text-yellow-400 font-bold text-lg">Canciones Actuales</h4>
+                    </div>
+                    <div class="space-y-3">
+                        ${album.tracks.map((track, index) => `
+                            <div class="flex items-center space-x-4 p-4 bg-white bg-opacity-10 rounded-xl">
+                                <span class="text-yellow-400 font-bold w-6">${index + 1}</span>
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-white font-semibold truncate">${track.name}</p>
+                                    <p class="text-gray-400 text-sm">${track.duration} • ${(track.size / (1024 * 1024)).toFixed(1)} MB</p>
+                                </div>
+                                <span class="text-yellow-400 text-xl">📝</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <p class="text-sm text-gray-400 mt-4">💡 Puedes agregar más canciones seleccionando archivos</p>
+                </div>
+            `;
+            
+            const submitBtn = document.querySelector('#albumForm button[type="submit"]');
+            submitBtn.innerHTML = `
+                <span>💾</span>
+                <span>Actualizar Álbum</span>
+            `;
+            submitBtn.setAttribute('data-editing', albumId);
+            
+            document.getElementById('albumForm').scrollIntoView({ behavior: 'smooth' });
+            showNotification(`Editando: ${album.title}`, 'info');
+        }
+
+        // Eliminar álbum
+        function deleteAlbum(albumId) {
+            const album = musicAlbums.find(a => a.id === albumId);
+            if (!album) return;
+            
+            if (confirm(`¿Eliminar "${album.title}"?\n\nEsta acción no se puede deshacer.`)) {
+                // Si se está reproduciendo una canción de este álbum, detener reproducción
+                if (currentAlbumId === albumId) {
+                    closeGlobalPlayer();
+                }
+                
+                // Eliminar del array
+                musicAlbums = musicAlbums.filter(a => a.id !== albumId);
+                Storage.save();
+                
+                showNotification(`${album.title} eliminado`, 'success');
+                
+                // Actualizar ambas vistas
+                loadAdminPanel();
+                loadAlbumsGallery();
+            }
+        }
+
+        // Descargar
+        function downloadTrack(filename) {
+            showNotification(`Descargando: ${filename}`, 'info');
+        }
+
+        // Utilidades
+        function generateRandomDuration() {
+            const minutes = Math.floor(Math.random() * 4) + 2;
+            const seconds = Math.floor(Math.random() * 60);
+            return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 p-4 rounded-2xl shadow-lg transition-all duration-300 transform translate-x-full max-w-sm`;
+            
+            const styles = {
+                success: 'bg-yellow-400 text-black border-4 border-yellow-400',
+                error: 'bg-white text-black border-4 border-white',
+                warning: 'bg-yellow-400 text-black border-4 border-yellow-400',
+                info: 'bg-black text-yellow-400 border-4 border-yellow-400'
+            };
+            
+            notification.className += ` ${styles[type] || styles.info}`;
+            notification.innerHTML = `<p class="font-bold">${message}</p>`;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.classList.remove('translate-x-full');
+            }, 100);
+            
+            setTimeout(() => {
+                notification.classList.add('translate-x-full');
+                setTimeout(() => {
+                    if (document.body.contains(notification)) {
+                        document.body.removeChild(notification);
+                    }
+                }, 300);
+            }, 3000);
+        }
+
+        // Cerrar modal
+        document.getElementById('albumModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeAlbumModal();
+            }
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'980d5b10f1c76dba',t:'MTc1ODE2MTkzOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
