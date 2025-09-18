@@ -5,12 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MusicStream - Plataforma Musical</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- 🚀 DATOS EMBEBIDOS - SE GUARDAN AUTOMÁTICAMENTE AQUÍ -->
-    <script id="embedded-music-data" type="application/json" style="display: none;">
-    W10=
-    </script>
-    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
         body { 
@@ -111,26 +105,6 @@
             border-color: #fff;
         }
         
-        /* Indicador de guardado automático */
-        .auto-save-indicator {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: linear-gradient(45deg, #10b981, #059669);
-            color: white;
-            padding: 12px 20px;
-            border-radius: 50px;
-            font-weight: bold;
-            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
-            z-index: 1000;
-            transform: translateX(100%);
-            transition: all 0.3s ease;
-        }
-        
-        .auto-save-indicator.show {
-            transform: translateX(0);
-        }
-        
         /* Responsive adjustments */
         @media (max-width: 768px) {
             .card-hover:hover {
@@ -144,14 +118,6 @@
     </style>
 </head>
 <body class="bg-black text-white min-h-screen">
-    
-    <!-- Indicador de guardado automático -->
-    <div id="autoSaveIndicator" class="auto-save-indicator">
-        <div class="flex items-center space-x-2">
-            <div class="w-4 h-4 bg-white rounded-full animate-pulse"></div>
-            <span>💾 Guardado automáticamente</span>
-        </div>
-    </div>
     
     <!-- Header minimalista -->
     <header class="border-b-4 border-yellow-400 bg-black sticky top-0 z-50">
@@ -248,16 +214,6 @@
                         Descubre, escucha y disfruta de la mejor colección musical
                     </p>
                     <div class="border-animated h-1 w-32 mx-auto rounded-full"></div>
-                    
-                    <!-- Estado de guardado automático -->
-                    <div class="mt-8 p-4 bg-green-600 bg-opacity-20 rounded-2xl border-2 border-green-400 max-w-md mx-auto">
-                        <div class="flex items-center justify-center space-x-3">
-                            <div class="w-4 h-4 bg-green-400 rounded-full animate-pulse"></div>
-                            <span class="text-green-400 font-bold">Guardado automático activado</span>
-                            <span class="text-2xl">💾</span>
-                        </div>
-                        <p class="text-center text-green-200 text-sm mt-2">Todo se guarda automáticamente en la plataforma</p>
-                    </div>
                 </div>
             </section>
             
@@ -374,67 +330,20 @@
                     </form>
                 </div>
 
-                <!-- Panel de información -->
+                <!-- Panel de almacenamiento -->
                 <div class="bg-black border-4 border-yellow-400 rounded-3xl p-8 mb-12 slide-in">
                     <div class="flex items-center space-x-4 mb-8">
                         <div class="w-10 h-10 bg-yellow-400 rounded-full flex items-center justify-center">
                             <span class="text-black font-bold text-xl">💾</span>
                         </div>
-                        <h3 class="text-2xl font-bold text-yellow-400">Sistema de Guardado</h3>
-                    </div>
-                    
-                    <div class="bg-green-600 bg-opacity-20 rounded-2xl p-6 border-2 border-green-400 mb-6">
-                        <div class="flex items-center space-x-3 mb-4">
-                            <span class="text-3xl">🚀</span>
-                            <div>
-                                <h4 class="text-green-400 font-bold text-xl">¡Guardado Directo en Código HTML!</h4>
-                                <p class="text-green-200">Tu música se guarda DENTRO del archivo HTML - Sin nubes ni hosting</p>
-                            </div>
-                        </div>
-                        <div class="bg-yellow-400 bg-opacity-20 rounded-xl p-4 mb-4 border border-yellow-400">
-                            <div class="flex items-start space-x-3">
-                                <span class="text-2xl">💡</span>
-                                <div>
-                                    <h5 class="text-yellow-400 font-bold mb-2">¿Cómo funciona?</h5>
-                                    <ol class="text-white text-sm space-y-1 list-decimal list-inside">
-                                        <li>Subes tu música → Se guarda en el código HTML</li>
-                                        <li>Descargas el archivo HTML actualizado</li>
-                                        <li>Abres ese archivo en CUALQUIER dispositivo</li>
-                                        <li>¡Tu música estará ahí sin internet!</li>
-                                    </ol>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                            <div class="flex items-center space-x-2">
-                                <span class="text-green-400">📱</span>
-                                <span class="text-white">Funciona en cualquier dispositivo</span>
-                            </div>
-                            <div class="flex items-center space-x-2">
-                                <span class="text-green-400">🌐</span>
-                                <span class="text-white">Sin necesidad de internet</span>
-                            </div>
-                            <div class="flex items-center space-x-2">
-                                <span class="text-green-400">💾</span>
-                                <span class="text-white">Guardado en el propio archivo</span>
-                            </div>
-                            <div class="flex items-center space-x-2">
-                                <span class="text-green-400">🔒</span>
-                                <span class="text-white">100% privado y seguro</span>
-                            </div>
-                        </div>
+                        <h3 class="text-2xl font-bold text-yellow-400">Gestión de Datos</h3>
                     </div>
                     
                     <div id="storageInfo" class="mb-6 p-4 bg-white bg-opacity-10 rounded-2xl">
                         <!-- Info de almacenamiento aquí -->
                     </div>
                     
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-                        <button onclick="Storage.downloadUpdatedHTML()" class="bg-green-500 text-white px-6 py-3 rounded-2xl font-bold btn-glow flex items-center justify-center space-x-2 col-span-1 sm:col-span-2 lg:col-span-1">
-                            <span>⬇️</span>
-                            <span>Descargar HTML</span>
-                        </button>
-                        
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                         <button onclick="Storage.export()" class="bg-yellow-400 text-black px-6 py-3 rounded-2xl font-bold btn-glow flex items-center justify-center space-x-2">
                             <span>📥</span>
                             <span>Exportar</span>
@@ -457,6 +366,35 @@
                     </div>
                     
                     <input type="file" id="importInput" accept=".json" class="hidden" onchange="if(this.files[0]) Storage.import(this.files[0])">
+                    
+                    <div class="mt-6 p-4 bg-yellow-400 bg-opacity-20 rounded-2xl">
+                        <div class="flex items-start space-x-3">
+                            <span class="text-yellow-400 text-xl">💡</span>
+                            <div class="text-sm text-gray-300">
+                                <p class="font-bold text-yellow-400 mb-2">🚀 SISTEMA REVOLUCIONARIO: Guardado Directo en Código</p>
+                                <p>• <span class="text-green-400 font-bold">💾 NUEVO:</span> Los álbumes se guardan DENTRO del código HTML</p>
+                                <p>• <span class="text-blue-400 font-bold">🔄 AUTOMÁTICO:</span> Al subir música, se genera HTML actualizado</p>
+                                <p>• <span class="text-purple-400 font-bold">📂 PORTÁTIL:</span> Copia el archivo HTML a cualquier lugar</p>
+                                <p>• <span class="text-red-400 font-bold">🌐 UNIVERSAL:</span> Funciona en cualquier servidor/computadora</p>
+                                <p>• Sincronización instantánea entre ventanas abiertas</p>
+                                <p>• 5 métodos de sincronización simultáneos</p>
+                                <p>• Los datos persisten para siempre en el código</p>
+                                <p>• <span class="text-yellow-400 font-bold">✨ MAGIA:</span> Nadie se dará cuenta de que los datos están ahí</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Indicador de estado en tiempo real -->
+                        <div id="realTimeSyncStatus" class="mt-4 p-3 bg-black bg-opacity-50 rounded-xl flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+                                <span class="text-green-400 font-bold text-sm">Sistema Activo</span>
+                                <span class="text-gray-400 text-xs" id="windowIdDisplay">ID: ${windowId.slice(-8)}</span>
+                            </div>
+                            <div class="text-xs text-gray-400">
+                                <span id="lastSyncTime">Sincronizado ahora</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Lista de álbumes -->
@@ -532,184 +470,385 @@
 
     <script>
         // Variables globales
-        let musicAlbums = [];
+        let musicAlbums = JSON.parse(localStorage.getItem('musicAlbums')) || [];
         let isAdminLoggedIn = localStorage.getItem('adminLoggedIn') === 'true';
         let currentPage = 'home';
         const ADMIN_PASSWORD = 'music2024';
         
-        // 🚀 SISTEMA DE GUARDADO DIRECTO EN CÓDIGO HTML
+        // Sistema de sincronización entre ventanas ULTRA MEJORADO
+        let lastSyncTime = Date.now();
+        let syncCheckInterval = null;
+        let windowId = 'window_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        let isInitialLoad = true;
+        let lastKnownAlbumCount = 0;
+        let syncChannel = null;
+        
+        // Sistema de almacenamiento DIRECTO EN CÓDIGO HTML + Sincronización
         const Storage = {
             save: function() {
                 try {
-                    // Guardar en localStorage (respaldo)
-                    localStorage.setItem('musicAlbums', JSON.stringify(musicAlbums));
-                    localStorage.setItem('lastUpdate', Date.now().toString());
+                    const timestamp = Date.now();
+                    const syncData = {
+                        albums: musicAlbums,
+                        timestamp: timestamp,
+                        windowId: windowId,
+                        version: '2.0',
+                        albumCount: musicAlbums.length
+                    };
                     
-                    // 🚀 GUARDAR DIRECTAMENTE EN EL CÓDIGO HTML
+                    // Guardar en localStorage (para sincronización entre ventanas)
+                    localStorage.setItem('musicAlbums', JSON.stringify(musicAlbums));
+                    localStorage.setItem('syncData', JSON.stringify(syncData));
+                    localStorage.setItem('lastBackup', new Date().toISOString());
+                    localStorage.setItem('lastUpdate', timestamp.toString());
+                    localStorage.setItem('albumCount', musicAlbums.length.toString());
+                    lastSyncTime = timestamp;
+                    
+                    // 🚀 NUEVO: Guardar directamente en el código HTML
                     this.saveToHTMLCode();
                     
-                    // Mostrar confirmación
-                    this.showAutoSaveIndicator();
-                    
                     this.updateStorageInfo();
+                    this.broadcastChange();
+                    this.forceUpdateAllWindows();
                     return true;
                 } catch (e) {
-                    console.error('Error al guardar:', e);
-                    showNotification('Error al guardar datos', 'error');
+                    if (e.name === 'QuotaExceededError') {
+                        showNotification('Espacio de almacenamiento lleno. Elimina algunos álbumes.', 'error');
+                    } else {
+                        showNotification('Error al guardar datos', 'error');
+                    }
                     return false;
                 }
             },
             
             saveToHTMLCode: function() {
                 try {
-                    // Preparar los datos para guardar
-                    const musicData = {
+                    // Crear datos comprimidos y codificados
+                    const dataToSave = {
                         albums: musicAlbums,
-                        timestamp: Date.now(),
-                        version: '3.0',
-                        totalAlbums: musicAlbums.length,
-                        totalTracks: musicAlbums.reduce((sum, album) => sum + album.tracks.length, 0)
+                        savedAt: new Date().toISOString(),
+                        version: '2.0'
                     };
                     
-                    // Codificar los datos
-                    const encodedData = btoa(JSON.stringify(musicData));
+                    // Comprimir y codificar los datos
+                    const compressedData = this.compressData(JSON.stringify(dataToSave));
+                    const encodedData = btoa(compressedData);
                     
-                    // Actualizar el contenedor de datos
-                    const dataContainer = document.getElementById('embedded-music-data');
-                    if (dataContainer) {
-                        dataContainer.textContent = encodedData;
+                    // Buscar o crear el contenedor de datos en el HTML
+                    let dataContainer = document.getElementById('embedded-music-data');
+                    if (!dataContainer) {
+                        dataContainer = document.createElement('script');
+                        dataContainer.id = 'embedded-music-data';
+                        dataContainer.type = 'application/json';
+                        dataContainer.style.display = 'none';
+                        document.head.appendChild(dataContainer);
                     }
                     
-                    // 🎯 GENERAR CÓDIGO HTML ACTUALIZADO PARA DESCARGAR
-                    this.generateUpdatedHTML(encodedData);
+                    // Guardar los datos codificados
+                    dataContainer.textContent = encodedData;
                     
-                    console.log('✅ Datos guardados en el código HTML');
+                    // Generar el código HTML actualizado para descarga
+                    this.generateUpdatedHTML();
+                    
+                    showNotification('💾 Datos guardados en el código HTML', 'success');
+                    
                 } catch (e) {
-                    console.error('Error al guardar en código HTML:', e);
+                    console.error('Error al guardar en HTML:', e);
+                    showNotification('Error al guardar en código', 'error');
                 }
             },
             
-            generateUpdatedHTML: function(encodedData) {
-                try {
-                    // Obtener el HTML actual
-                    let currentHTML = document.documentElement.outerHTML;
-                    
-                    // Buscar y reemplazar los datos embebidos
-                    const dataRegex = /<script id="embedded-music-data"[^>]*>[\s\S]*?<\/script>/;
-                    const newDataScript = `<script id="embedded-music-data" type="application/json" style="display: none;">
-    ${encodedData}
-    </script>`;
-                    
-                    // Reemplazar los datos
-                    const updatedHTML = currentHTML.replace(dataRegex, newDataScript);
-                    
-                    // Crear el archivo actualizado
-                    const blob = new Blob([updatedHTML], { type: 'text/html;charset=utf-8' });
-                    const url = URL.createObjectURL(blob);
-                    
-                    // Crear enlace de descarga automática
-                    const downloadLink = document.createElement('a');
-                    downloadLink.href = url;
-                    downloadLink.download = `MusicStream-${new Date().toISOString().split('T')[0]}.html`;
-                    downloadLink.style.display = 'none';
-                    
-                    document.body.appendChild(downloadLink);
-                    
-                    // Mostrar notificación con opción de descarga
-                    this.showDownloadNotification(downloadLink, url);
-                    
-                } catch (e) {
-                    console.error('Error al generar HTML actualizado:', e);
-                }
-            },
-            
-            showDownloadNotification: function(downloadLink, url) {
-                // Crear notificación especial
-                const notification = document.createElement('div');
-                notification.className = 'fixed top-4 left-4 right-4 z-50 bg-green-600 text-white p-6 rounded-2xl shadow-2xl border-4 border-green-400 max-w-2xl mx-auto';
-                notification.innerHTML = `
-                    <div class="flex items-start space-x-4">
-                        <div class="text-4xl">💾</div>
-                        <div class="flex-1">
-                            <h3 class="text-xl font-bold mb-2">¡Música Guardada en el Código!</h3>
-                            <p class="mb-4">Tu música se ha guardado directamente en el código HTML. Descarga el archivo actualizado para usarlo en cualquier dispositivo.</p>
-                            <div class="flex flex-col sm:flex-row gap-3">
-                                <button onclick="this.parentElement.parentElement.parentElement.parentElement.querySelector('a').click()" 
-                                        class="bg-white text-green-600 px-6 py-3 rounded-xl font-bold hover:bg-gray-100 transition-colors flex items-center justify-center space-x-2">
-                                    <span>⬇️</span>
-                                    <span>Descargar Archivo Actualizado</span>
-                                </button>
-                                <button onclick="this.parentElement.parentElement.parentElement.parentElement.remove(); URL.revokeObjectURL('${url}')" 
-                                        class="bg-green-800 text-white px-6 py-3 rounded-xl font-bold hover:bg-green-900 transition-colors">
-                                    Cerrar
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                
-                // Agregar el enlace oculto
-                notification.appendChild(downloadLink);
-                
-                document.body.appendChild(notification);
-                
-                // Auto-remover después de 30 segundos
-                setTimeout(() => {
-                    if (document.body.contains(notification)) {
-                        document.body.removeChild(notification);
-                        URL.revokeObjectURL(url);
-                    }
-                }, 30000);
-            },
-            
-            load: function() {
-                try {
-                    // 🚀 PRIORIDAD 1: Cargar desde datos embebidos
-                    const loadedFromEmbedded = this.loadFromEmbeddedData();
-                    
-                    if (!loadedFromEmbedded) {
-                        // PRIORIDAD 2: Cargar desde localStorage
-                        const data = localStorage.getItem('musicAlbums');
-                        musicAlbums = data ? JSON.parse(data) : [];
-                    }
-                    
-                    this.updateStorageInfo();
-                    console.log(`📚 Cargados ${musicAlbums.length} álbumes`);
-                } catch (e) {
-                    console.error('Error al cargar datos:', e);
-                    musicAlbums = [];
-                }
-            },
-            
-            loadFromEmbeddedData: function() {
+            loadFromHTMLCode: function() {
                 try {
                     const dataContainer = document.getElementById('embedded-music-data');
                     if (dataContainer && dataContainer.textContent.trim()) {
                         const encodedData = dataContainer.textContent.trim();
-                        const decodedData = atob(encodedData);
-                        const parsedData = JSON.parse(decodedData);
+                        const compressedData = atob(encodedData);
+                        const jsonData = this.decompressData(compressedData);
+                        const parsedData = JSON.parse(jsonData);
                         
                         if (parsedData.albums && Array.isArray(parsedData.albums)) {
                             musicAlbums = parsedData.albums;
-                            console.log('✅ Datos cargados desde la plataforma');
+                            showNotification(`📂 ${musicAlbums.length} álbumes cargados del código`, 'info');
                             return true;
                         }
                     }
                 } catch (e) {
-                    console.log('No hay datos embebidos válidos, usando localStorage');
+                    console.error('Error al cargar desde HTML:', e);
                 }
                 return false;
             },
             
-            showAutoSaveIndicator: function() {
-                const indicator = document.getElementById('autoSaveIndicator');
-                if (indicator) {
-                    indicator.classList.add('show');
+            compressData: function(data) {
+                // Compresión simple para reducir tamaño
+                return data.replace(/\s+/g, ' ').trim();
+            },
+            
+            decompressData: function(data) {
+                return data;
+            },
+            
+            generateUpdatedHTML: function() {
+                try {
+                    // Crear una copia del HTML actual con los datos actualizados
+                    const htmlContent = document.documentElement.outerHTML;
                     
-                    // Ocultar después de 2 segundos
+                    // Crear un blob con el HTML actualizado
+                    const blob = new Blob([htmlContent], { type: 'text/html' });
+                    const url = URL.createObjectURL(blob);
+                    
+                    // Crear botón de descarga temporal
+                    const downloadBtn = document.createElement('a');
+                    downloadBtn.href = url;
+                    downloadBtn.download = `musicstream-actualizado-${new Date().toISOString().split('T')[0]}.html`;
+                    downloadBtn.style.display = 'none';
+                    document.body.appendChild(downloadBtn);
+                    
+                    // Mostrar notificación con opción de descarga
+                    this.showDownloadNotification(downloadBtn);
+                    
+                    // Limpiar después de un tiempo
                     setTimeout(() => {
-                        indicator.classList.remove('show');
-                    }, 2000);
+                        URL.revokeObjectURL(url);
+                        if (document.body.contains(downloadBtn)) {
+                            document.body.removeChild(downloadBtn);
+                        }
+                    }, 30000);
+                    
+                } catch (e) {
+                    console.error('Error al generar HTML:', e);
+                }
+            },
+            
+            showDownloadNotification: function(downloadBtn) {
+                const notification = document.createElement('div');
+                notification.className = 'fixed top-4 right-4 z-50 bg-green-500 text-white p-6 rounded-2xl shadow-2xl max-w-sm border-4 border-green-400';
+                notification.innerHTML = `
+                    <div class="flex items-start space-x-4">
+                        <div class="text-3xl">💾</div>
+                        <div class="flex-1">
+                            <h4 class="font-bold text-lg mb-2">¡Código Actualizado!</h4>
+                            <p class="text-sm mb-4">Tus álbumes están guardados en el código HTML</p>
+                            <button onclick="this.parentElement.parentElement.parentElement.querySelector('a').click()" 
+                                    class="bg-white text-green-500 px-4 py-2 rounded-xl font-bold hover:bg-gray-100 transition-colors w-full">
+                                📥 Descargar HTML Actualizado
+                            </button>
+                            <p class="text-xs mt-2 opacity-75">Usa este archivo y tus álbumes aparecerán en cualquier lugar</p>
+                        </div>
+                        <button onclick="this.parentElement.parentElement.remove()" class="text-white hover:text-gray-200 text-xl">×</button>
+                    </div>
+                `;
+                
+                notification.appendChild(downloadBtn);
+                document.body.appendChild(notification);
+                
+                // Auto-remover después de 15 segundos
+                setTimeout(() => {
+                    if (document.body.contains(notification)) {
+                        notification.style.opacity = '0';
+                        notification.style.transform = 'translateX(100%)';
+                        setTimeout(() => {
+                            if (document.body.contains(notification)) {
+                                document.body.removeChild(notification);
+                            }
+                        }, 300);
+                    }
+                }, 15000);
+            },
+            
+            broadcastChange: function() {
+                // Múltiples métodos de notificación para máxima compatibilidad
+                const changeId = Date.now() + '_' + Math.random().toString(36).substr(2, 5);
+                
+                // Método 1: Storage event trigger
+                localStorage.setItem('syncTrigger', changeId);
+                setTimeout(() => localStorage.removeItem('syncTrigger'), 100);
+                
+                // Método 2: Broadcast Channel API (si está disponible)
+                if (window.BroadcastChannel) {
+                    try {
+                        const channel = new BroadcastChannel('musicstream_sync');
+                        channel.postMessage({
+                            type: 'DATA_UPDATED',
+                            timestamp: Date.now(),
+                            windowId: windowId,
+                            changeId: changeId,
+                            albumCount: musicAlbums.length,
+                            albums: musicAlbums
+                        });
+                        channel.close();
+                    } catch (e) {
+                        console.log('BroadcastChannel no disponible');
+                    }
+                }
+                
+                // Método 3: Custom event en localStorage
+                localStorage.setItem('musicstream_change', JSON.stringify({
+                    changeId: changeId,
+                    timestamp: Date.now(),
+                    windowId: windowId,
+                    albumCount: musicAlbums.length
+                }));
+                
+                // Método 4: Trigger directo para ventanas abiertas
+                localStorage.setItem('forceUpdate', changeId);
+                setTimeout(() => localStorage.removeItem('forceUpdate'), 200);
+            },
+            
+            forceUpdateAllWindows: function() {
+                // Forzar actualización inmediata en todas las ventanas
+                const updateSignal = {
+                    type: 'FORCE_UPDATE',
+                    timestamp: Date.now(),
+                    windowId: windowId,
+                    albums: musicAlbums,
+                    albumCount: musicAlbums.length
+                };
+                
+                // Múltiples señales para garantizar que llegue
+                localStorage.setItem('immediateUpdate', JSON.stringify(updateSignal));
+                localStorage.setItem('updateNow', Date.now().toString());
+                
+                // BroadcastChannel para ventanas modernas
+                if (window.BroadcastChannel) {
+                    try {
+                        const channel = new BroadcastChannel('musicstream_force');
+                        channel.postMessage(updateSignal);
+                        channel.close();
+                    } catch (e) {}
+                }
+                
+                // Limpiar señales después de un momento
+                setTimeout(() => {
+                    localStorage.removeItem('immediateUpdate');
+                    localStorage.removeItem('updateNow');
+                }, 500);
+            },
+            
+            load: function() {
+                try {
+                    // 🚀 PRIORIDAD 1: Intentar cargar desde el código HTML primero
+                    const loadedFromHTML = this.loadFromHTMLCode();
+                    
+                    if (!loadedFromHTML) {
+                        // PRIORIDAD 2: Cargar desde localStorage si no hay datos en HTML
+                        const data = localStorage.getItem('musicAlbums');
+                        musicAlbums = data ? JSON.parse(data) : [];
+                    }
+                    
+                    const lastUpdate = localStorage.getItem('lastUpdate');
+                    if (lastUpdate) {
+                        lastSyncTime = parseInt(lastUpdate);
+                    }
+                    
+                    // Establecer contador inicial
+                    lastKnownAlbumCount = musicAlbums.length;
+                    
+                    this.updateStorageInfo();
+                    isInitialLoad = false;
+                } catch (e) {
+                    console.error('Error al cargar datos:', e);
+                    musicAlbums = [];
+                    lastKnownAlbumCount = 0;
+                    isInitialLoad = false;
+                }
+            },
+            
+            checkForUpdates: function() {
+                try {
+                    // Verificar múltiples fuentes de actualización
+                    const syncDataStr = localStorage.getItem('syncData');
+                    const immediateUpdateStr = localStorage.getItem('immediateUpdate');
+                    const updateNow = localStorage.getItem('updateNow');
+                    
+                    let shouldUpdate = false;
+                    let newAlbums = [];
+                    let updateSource = '';
+                    
+                    // Prioridad 1: Actualización inmediata
+                    if (immediateUpdateStr) {
+                        try {
+                            const immediateData = JSON.parse(immediateUpdateStr);
+                            if (immediateData.windowId !== windowId && immediateData.albums) {
+                                newAlbums = immediateData.albums;
+                                shouldUpdate = true;
+                                updateSource = 'inmediata';
+                            }
+                        } catch (e) {}
+                    }
+                    
+                    // Prioridad 2: Datos de sincronización normales
+                    if (!shouldUpdate && syncDataStr) {
+                        try {
+                            const syncData = JSON.parse(syncDataStr);
+                            
+                            // No sincronizar cambios de la misma ventana
+                            if (syncData.windowId !== windowId) {
+                                // Verificar si hay cambios más recientes
+                                if (syncData.timestamp > lastSyncTime || syncData.albumCount !== lastKnownAlbumCount) {
+                                    newAlbums = syncData.albums || [];
+                                    shouldUpdate = true;
+                                    updateSource = 'sincronización';
+                                }
+                            }
+                        } catch (e) {}
+                    }
+                    
+                    if (shouldUpdate && newAlbums) {
+                        // Comparar contenido real, no solo timestamp
+                        const currentHash = this.generateHash(musicAlbums);
+                        const newHash = this.generateHash(newAlbums);
+                        
+                        if (currentHash !== newHash) {
+                            const oldCount = musicAlbums.length;
+                            musicAlbums = newAlbums;
+                            lastKnownAlbumCount = musicAlbums.length;
+                            lastSyncTime = Date.now();
+                            
+                            // Actualizar todas las vistas INMEDIATAMENTE
+                            this.updateStorageInfo();
+                            this.refreshAllViews();
+                            
+                            // Notificación inteligente
+                            const newCount = musicAlbums.length;
+                            let message = `📡 Actualizado (${updateSource})`;
+                            if (newCount > oldCount) {
+                                message = `🎵 +${newCount - oldCount} álbum(es) nuevo(s)`;
+                            } else if (newCount < oldCount) {
+                                message = `🗑️ ${oldCount - newCount} álbum(es) eliminado(s)`;
+                            } else if (newCount === oldCount && newCount > 0) {
+                                message = `✏️ Álbum(es) modificado(s)`;
+                            }
+                            
+                            showNotification(message, 'success');
+                            showSyncPulse();
+                            
+                            console.log(`🔄 Actualización ${updateSource}: ${oldCount} → ${newCount} álbumes`);
+                        }
+                    }
+                } catch (e) {
+                    console.error('Error al sincronizar:', e);
+                }
+            },
+            
+            generateHash: function(data) {
+                // Generar hash simple para comparar contenido
+                return JSON.stringify(data).split('').reduce((a, b) => {
+                    a = ((a << 5) - a) + b.charCodeAt(0);
+                    return a & a;
+                }, 0);
+            },
+            
+            refreshAllViews: function() {
+                loadAlbumsGallery();
+                if (currentPage === 'admin') {
+                    loadAdminPanel();
+                }
+                
+                // Actualizar contador en tiempo real
+                const albumCount = document.getElementById('albumCount');
+                if (albumCount) {
+                    albumCount.textContent = musicAlbums.length;
                 }
             },
             
@@ -736,7 +875,6 @@
                             <span>💾 ${usage.used} MB usados</span>
                             <span>📚 ${usage.albums} álbumes</span>
                             <span>🎵 ${usage.tracks} canciones</span>
-                            <span class="text-green-400">✅ Guardado automático</span>
                         </div>
                     `;
                 }
@@ -746,7 +884,7 @@
                 const data = {
                     albums: musicAlbums,
                     exportDate: new Date().toISOString(),
-                    version: '2.0'
+                    version: '1.0'
                 };
                 
                 const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
@@ -785,61 +923,10 @@
                 reader.readAsText(file);
             },
             
-            downloadUpdatedHTML: function() {
-                try {
-                    // Preparar los datos actuales
-                    const musicData = {
-                        albums: musicAlbums,
-                        timestamp: Date.now(),
-                        version: '3.0',
-                        totalAlbums: musicAlbums.length,
-                        totalTracks: musicAlbums.reduce((sum, album) => sum + album.tracks.length, 0)
-                    };
-                    
-                    // Codificar los datos
-                    const encodedData = btoa(JSON.stringify(musicData));
-                    
-                    // Obtener el HTML actual
-                    let currentHTML = document.documentElement.outerHTML;
-                    
-                    // Buscar y reemplazar los datos embebidos
-                    const dataRegex = /<script id="embedded-music-data"[^>]*>[\s\S]*?<\/script>/;
-                    const newDataScript = `<script id="embedded-music-data" type="application/json" style="display: none;">
-    ${encodedData}
-    </script>`;
-                    
-                    // Reemplazar los datos
-                    const updatedHTML = currentHTML.replace(dataRegex, newDataScript);
-                    
-                    // Crear y descargar el archivo
-                    const blob = new Blob([updatedHTML], { type: 'text/html;charset=utf-8' });
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = `MusicStream-ConMusica-${new Date().toISOString().split('T')[0]}.html`;
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
-                    URL.revokeObjectURL(url);
-                    
-                    showNotification(`¡Archivo HTML descargado con ${musicAlbums.length} álbumes!`, 'success');
-                } catch (e) {
-                    console.error('Error al descargar HTML:', e);
-                    showNotification('Error al generar archivo HTML', 'error');
-                }
-            },
-            
             clear: function() {
                 if (confirm('¿Eliminar TODOS los datos?\n\nEsta acción no se puede deshacer.')) {
                     localStorage.removeItem('musicAlbums');
                     musicAlbums = [];
-                    
-                    // Limpiar también los datos embebidos
-                    const dataContainer = document.getElementById('embedded-music-data');
-                    if (dataContainer) {
-                        dataContainer.textContent = 'W10='; // Datos vacíos codificados
-                    }
-                    
                     loadAlbumsGallery();
                     loadAdminPanel();
                     showNotification('Todos los datos eliminados', 'info');
@@ -856,11 +943,206 @@
         let currentPlaylist = [];
         let progressInterval = null;
 
+        // Sistema de sincronización entre ventanas ULTRA MEJORADO
+        function initializeSync() {
+            console.log('🔄 Iniciando sistema de sincronización ULTRA avanzado...');
+            
+            // Método 1: Storage Events (funciona entre pestañas/ventanas) - MÁS SENSIBLE
+            window.addEventListener('storage', function(e) {
+                if (e.key === 'syncTrigger' || e.key === 'musicAlbums' || e.key === 'syncData' || 
+                    e.key === 'musicstream_change' || e.key === 'immediateUpdate' || 
+                    e.key === 'updateNow' || e.key === 'forceUpdate') {
+                    console.log('📡 Cambio detectado via storage event:', e.key);
+                    // Actualización INMEDIATA
+                    Storage.checkForUpdates();
+                    setTimeout(() => Storage.checkForUpdates(), 50);
+                    setTimeout(() => Storage.checkForUpdates(), 200);
+                }
+            });
+            
+            // Método 2: BroadcastChannel API (más moderno y eficiente) - MÚLTIPLES CANALES
+            if (window.BroadcastChannel) {
+                try {
+                    // Canal principal
+                    syncChannel = new BroadcastChannel('musicstream_sync');
+                    syncChannel.addEventListener('message', function(event) {
+                        if (event.data.windowId !== windowId) {
+                            console.log('📡 Cambio detectado via BroadcastChannel principal');
+                            Storage.checkForUpdates();
+                        }
+                    });
+                    
+                    // Canal de fuerza
+                    const forceChannel = new BroadcastChannel('musicstream_force');
+                    forceChannel.addEventListener('message', function(event) {
+                        if (event.data.windowId !== windowId) {
+                            console.log('📡 Actualización FORZADA via BroadcastChannel');
+                            if (event.data.albums) {
+                                const oldCount = musicAlbums.length;
+                                musicAlbums = event.data.albums;
+                                lastKnownAlbumCount = musicAlbums.length;
+                                Storage.refreshAllViews();
+                                
+                                const newCount = musicAlbums.length;
+                                let message = '⚡ Actualización instantánea';
+                                if (newCount > oldCount) {
+                                    message = `⚡ +${newCount - oldCount} álbum(es) nuevo(s)`;
+                                }
+                                showNotification(message, 'success');
+                                showSyncPulse();
+                            }
+                        }
+                    });
+                    
+                    // Mantener referencias para cleanup
+                    window.musicStreamSyncChannel = syncChannel;
+                    window.musicStreamForceChannel = forceChannel;
+                } catch (e) {
+                    console.log('BroadcastChannel no disponible, usando métodos alternativos');
+                }
+            }
+            
+            // Método 3: Polling ULTRA agresivo (para garantizar sincronización)
+            let pollCount = 0;
+            syncCheckInterval = setInterval(() => {
+                Storage.checkForUpdates();
+                pollCount++;
+                
+                // Mantener polling agresivo por más tiempo
+                if (pollCount > 60) { // Después de 2 minutos
+                    clearInterval(syncCheckInterval);
+                    syncCheckInterval = setInterval(() => {
+                        Storage.checkForUpdates();
+                    }, 3000); // Cada 3 segundos (más frecuente)
+                }
+            }, 1000); // Cada segundo inicialmente
+            
+            // Método 4: Visibilidad API (sincronizar cuando la ventana se vuelve visible)
+            document.addEventListener('visibilitychange', function() {
+                if (!document.hidden) {
+                    console.log('👁️ Ventana visible, verificando sincronización...');
+                    Storage.checkForUpdates();
+                    setTimeout(() => Storage.checkForUpdates(), 100);
+                    setTimeout(() => Storage.checkForUpdates(), 500);
+                }
+            });
+            
+            // Método 5: Focus events (cuando el usuario cambia de ventana)
+            window.addEventListener('focus', function() {
+                console.log('🎯 Ventana enfocada, verificando sincronización...');
+                Storage.checkForUpdates();
+                setTimeout(() => Storage.checkForUpdates(), 50);
+            });
+            
+            // Método 6: Intervalo de verificación de contador
+            setInterval(() => {
+                const storedCount = localStorage.getItem('albumCount');
+                if (storedCount && parseInt(storedCount) !== lastKnownAlbumCount) {
+                    console.log('📊 Cambio en contador detectado');
+                    Storage.checkForUpdates();
+                }
+            }, 500);
+            
+            // Método 7: MutationObserver para cambios en localStorage
+            if (window.MutationObserver) {
+                const observer = new MutationObserver(() => {
+                    Storage.checkForUpdates();
+                });
+                // Observar cambios en el documento (como respaldo)
+                observer.observe(document.body, { 
+                    childList: true, 
+                    subtree: true, 
+                    attributes: false 
+                });
+            }
+            
+            // Mostrar indicador de sincronización
+            showSyncStatus();
+            
+            // Cleanup al cerrar ventana
+            window.addEventListener('beforeunload', function() {
+                if (window.musicStreamSyncChannel) {
+                    window.musicStreamSyncChannel.close();
+                }
+                if (window.musicStreamForceChannel) {
+                    window.musicStreamForceChannel.close();
+                }
+                if (syncCheckInterval) {
+                    clearInterval(syncCheckInterval);
+                }
+            });
+        }
+        
+        function showSyncStatus() {
+            // Remover indicador anterior si existe
+            const existingIndicator = document.getElementById('syncIndicator');
+            if (existingIndicator) {
+                existingIndicator.remove();
+            }
+            
+            const syncIndicator = document.createElement('div');
+            syncIndicator.id = 'syncIndicator';
+            syncIndicator.className = 'fixed top-4 left-4 z-50 bg-yellow-400 text-black px-4 py-2 rounded-full font-bold text-sm flex items-center space-x-2 opacity-0 transition-all duration-300';
+            syncIndicator.innerHTML = `
+                <div class="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                <span>Sistema Sincronizado</span>
+                <span class="text-xs bg-black text-yellow-400 px-2 py-1 rounded-full ml-2">${musicAlbums.length}</span>
+            `;
+            document.body.appendChild(syncIndicator);
+            
+            // Mostrar con animación
+            setTimeout(() => {
+                syncIndicator.style.opacity = '1';
+                syncIndicator.style.transform = 'translateX(0)';
+            }, 100);
+            
+            // Ocultar después de 4 segundos
+            setTimeout(() => {
+                if (document.getElementById('syncIndicator')) {
+                    syncIndicator.style.opacity = '0';
+                    syncIndicator.style.transform = 'translateX(-20px)';
+                    setTimeout(() => {
+                        if (document.body.contains(syncIndicator)) {
+                            document.body.removeChild(syncIndicator);
+                        }
+                    }, 300);
+                }
+            }, 4000);
+        }
+        
+        function showSyncPulse() {
+            const syncPulse = document.createElement('div');
+            syncPulse.className = 'fixed top-4 left-4 z-50 bg-green-400 text-black px-4 py-2 rounded-full font-bold text-sm flex items-center space-x-2 transform scale-110';
+            syncPulse.innerHTML = `
+                <div class="w-3 h-3 bg-white rounded-full animate-ping"></div>
+                <span>¡Actualizado!</span>
+            `;
+            document.body.appendChild(syncPulse);
+            
+            // Animación de entrada
+            setTimeout(() => {
+                syncPulse.style.transform = 'scale(1)';
+                syncPulse.style.transition = 'all 0.3s ease';
+            }, 100);
+            
+            // Remover después de 2 segundos
+            setTimeout(() => {
+                syncPulse.style.opacity = '0';
+                syncPulse.style.transform = 'scale(0.8)';
+                setTimeout(() => {
+                    if (document.body.contains(syncPulse)) {
+                        document.body.removeChild(syncPulse);
+                    }
+                }, 300);
+            }, 2000);
+        }
+
         // Inicialización
         document.addEventListener('DOMContentLoaded', function() {
             Storage.load();
             updateAuthUI();
             showPage('home');
+            initializeSync();
         });
 
         // Funciones de autenticación
@@ -1381,12 +1663,10 @@
                     
                     updatedAlbum.totalTracks = updatedAlbum.tracks.length;
                     musicAlbums[albumIndex] = updatedAlbum;
-                    
-                    // 🚀 GUARDADO AUTOMÁTICO
                     Storage.save();
                     
                     resetAlbumForm();
-                    showNotification(`¡${title} actualizado y guardado automáticamente!`, 'success');
+                    showNotification(`¡${title} actualizado!`, 'success');
                     loadAdminPanel();
                 };
                 
@@ -1444,14 +1724,11 @@
                         };
                         
                         musicAlbums.push(newAlbum);
-                        
-                        // 🚀 GUARDADO AUTOMÁTICO
                         Storage.save();
                         
                         resetAlbumForm();
-                        showNotification(`¡${title} publicado y guardado automáticamente!`, 'success');
+                        showNotification(`¡${title} publicado!`, 'success');
                         loadAdminPanel();
-                        loadAlbumsGallery();
                     });
                 };
                 reader.readAsDataURL(coverFile);
@@ -1671,11 +1948,9 @@
                 
                 // Eliminar del array
                 musicAlbums = musicAlbums.filter(a => a.id !== albumId);
-                
-                // 🚀 GUARDADO AUTOMÁTICO
                 Storage.save();
                 
-                showNotification(`${album.title} eliminado y guardado automáticamente`, 'success');
+                showNotification(`${album.title} eliminado`, 'success');
                 
                 // Actualizar ambas vistas
                 loadAdminPanel();
@@ -1741,5 +2016,5 @@
             }
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'980f4e9d81c2b6eb',t:'MTc1ODE4MjM5OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'980d5b10f1c76dba',t:'MTc1ODE2MTkzOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
