@@ -385,28 +385,42 @@
                     
                     <div class="bg-green-600 bg-opacity-20 rounded-2xl p-6 border-2 border-green-400 mb-6">
                         <div class="flex items-center space-x-3 mb-4">
-                            <span class="text-3xl">✅</span>
+                            <span class="text-3xl">🚀</span>
                             <div>
-                                <h4 class="text-green-400 font-bold text-xl">¡Guardado Automático Activado!</h4>
-                                <p class="text-green-200">Todo se guarda automáticamente en la plataforma</p>
+                                <h4 class="text-green-400 font-bold text-xl">¡Guardado Directo en Código HTML!</h4>
+                                <p class="text-green-200">Tu música se guarda DENTRO del archivo HTML - Sin nubes ni hosting</p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-400 bg-opacity-20 rounded-xl p-4 mb-4 border border-yellow-400">
+                            <div class="flex items-start space-x-3">
+                                <span class="text-2xl">💡</span>
+                                <div>
+                                    <h5 class="text-yellow-400 font-bold mb-2">¿Cómo funciona?</h5>
+                                    <ol class="text-white text-sm space-y-1 list-decimal list-inside">
+                                        <li>Subes tu música → Se guarda en el código HTML</li>
+                                        <li>Descargas el archivo HTML actualizado</li>
+                                        <li>Abres ese archivo en CUALQUIER dispositivo</li>
+                                        <li>¡Tu música estará ahí sin internet!</li>
+                                    </ol>
+                                </div>
                             </div>
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                             <div class="flex items-center space-x-2">
-                                <span class="text-green-400">🔄</span>
-                                <span class="text-white">Guardado instantáneo</span>
+                                <span class="text-green-400">📱</span>
+                                <span class="text-white">Funciona en cualquier dispositivo</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <span class="text-green-400">🌐</span>
+                                <span class="text-white">Sin necesidad de internet</span>
                             </div>
                             <div class="flex items-center space-x-2">
                                 <span class="text-green-400">💾</span>
-                                <span class="text-white">Datos permanentes</span>
+                                <span class="text-white">Guardado en el propio archivo</span>
                             </div>
                             <div class="flex items-center space-x-2">
                                 <span class="text-green-400">🔒</span>
-                                <span class="text-white">Seguro y confiable</span>
-                            </div>
-                            <div class="flex items-center space-x-2">
-                                <span class="text-green-400">⚡</span>
-                                <span class="text-white">Sin configuración</span>
+                                <span class="text-white">100% privado y seguro</span>
                             </div>
                         </div>
                     </div>
@@ -415,7 +429,12 @@
                         <!-- Info de almacenamiento aquí -->
                     </div>
                     
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                        <button onclick="Storage.downloadUpdatedHTML()" class="bg-green-500 text-white px-6 py-3 rounded-2xl font-bold btn-glow flex items-center justify-center space-x-2 col-span-1 sm:col-span-2 lg:col-span-1">
+                            <span>⬇️</span>
+                            <span>Descargar HTML</span>
+                        </button>
+                        
                         <button onclick="Storage.export()" class="bg-yellow-400 text-black px-6 py-3 rounded-2xl font-bold btn-glow flex items-center justify-center space-x-2">
                             <span>📥</span>
                             <span>Exportar</span>
@@ -518,16 +537,16 @@
         let currentPage = 'home';
         const ADMIN_PASSWORD = 'music2024';
         
-        // Sistema de guardado automático MEJORADO
+        // 🚀 SISTEMA DE GUARDADO DIRECTO EN CÓDIGO HTML
         const Storage = {
             save: function() {
                 try {
-                    // Guardar en localStorage
+                    // Guardar en localStorage (respaldo)
                     localStorage.setItem('musicAlbums', JSON.stringify(musicAlbums));
                     localStorage.setItem('lastUpdate', Date.now().toString());
                     
-                    // 🚀 GUARDAR AUTOMÁTICAMENTE EN LA PLATAFORMA
-                    this.saveToEmbeddedData();
+                    // 🚀 GUARDAR DIRECTAMENTE EN EL CÓDIGO HTML
+                    this.saveToHTMLCode();
                     
                     // Mostrar confirmación
                     this.showAutoSaveIndicator();
@@ -541,26 +560,106 @@
                 }
             },
             
-            saveToEmbeddedData: function() {
+            saveToHTMLCode: function() {
                 try {
-                    // Buscar el contenedor de datos embebidos
+                    // Preparar los datos para guardar
+                    const musicData = {
+                        albums: musicAlbums,
+                        timestamp: Date.now(),
+                        version: '3.0',
+                        totalAlbums: musicAlbums.length,
+                        totalTracks: musicAlbums.reduce((sum, album) => sum + album.tracks.length, 0)
+                    };
+                    
+                    // Codificar los datos
+                    const encodedData = btoa(JSON.stringify(musicData));
+                    
+                    // Actualizar el contenedor de datos
                     const dataContainer = document.getElementById('embedded-music-data');
                     if (dataContainer) {
-                        // Codificar los datos y guardarlos
-                        const encodedData = btoa(JSON.stringify({
-                            albums: musicAlbums,
-                            timestamp: Date.now(),
-                            version: '2.0'
-                        }));
-                        
-                        // Guardar en el contenedor
                         dataContainer.textContent = encodedData;
-                        
-                        console.log('✅ Datos guardados automáticamente en la plataforma');
                     }
+                    
+                    // 🎯 GENERAR CÓDIGO HTML ACTUALIZADO PARA DESCARGAR
+                    this.generateUpdatedHTML(encodedData);
+                    
+                    console.log('✅ Datos guardados en el código HTML');
                 } catch (e) {
-                    console.error('Error al guardar en datos embebidos:', e);
+                    console.error('Error al guardar en código HTML:', e);
                 }
+            },
+            
+            generateUpdatedHTML: function(encodedData) {
+                try {
+                    // Obtener el HTML actual
+                    let currentHTML = document.documentElement.outerHTML;
+                    
+                    // Buscar y reemplazar los datos embebidos
+                    const dataRegex = /<script id="embedded-music-data"[^>]*>[\s\S]*?<\/script>/;
+                    const newDataScript = `<script id="embedded-music-data" type="application/json" style="display: none;">
+    ${encodedData}
+    </script>`;
+                    
+                    // Reemplazar los datos
+                    const updatedHTML = currentHTML.replace(dataRegex, newDataScript);
+                    
+                    // Crear el archivo actualizado
+                    const blob = new Blob([updatedHTML], { type: 'text/html;charset=utf-8' });
+                    const url = URL.createObjectURL(blob);
+                    
+                    // Crear enlace de descarga automática
+                    const downloadLink = document.createElement('a');
+                    downloadLink.href = url;
+                    downloadLink.download = `MusicStream-${new Date().toISOString().split('T')[0]}.html`;
+                    downloadLink.style.display = 'none';
+                    
+                    document.body.appendChild(downloadLink);
+                    
+                    // Mostrar notificación con opción de descarga
+                    this.showDownloadNotification(downloadLink, url);
+                    
+                } catch (e) {
+                    console.error('Error al generar HTML actualizado:', e);
+                }
+            },
+            
+            showDownloadNotification: function(downloadLink, url) {
+                // Crear notificación especial
+                const notification = document.createElement('div');
+                notification.className = 'fixed top-4 left-4 right-4 z-50 bg-green-600 text-white p-6 rounded-2xl shadow-2xl border-4 border-green-400 max-w-2xl mx-auto';
+                notification.innerHTML = `
+                    <div class="flex items-start space-x-4">
+                        <div class="text-4xl">💾</div>
+                        <div class="flex-1">
+                            <h3 class="text-xl font-bold mb-2">¡Música Guardada en el Código!</h3>
+                            <p class="mb-4">Tu música se ha guardado directamente en el código HTML. Descarga el archivo actualizado para usarlo en cualquier dispositivo.</p>
+                            <div class="flex flex-col sm:flex-row gap-3">
+                                <button onclick="this.parentElement.parentElement.parentElement.parentElement.querySelector('a').click()" 
+                                        class="bg-white text-green-600 px-6 py-3 rounded-xl font-bold hover:bg-gray-100 transition-colors flex items-center justify-center space-x-2">
+                                    <span>⬇️</span>
+                                    <span>Descargar Archivo Actualizado</span>
+                                </button>
+                                <button onclick="this.parentElement.parentElement.parentElement.parentElement.remove(); URL.revokeObjectURL('${url}')" 
+                                        class="bg-green-800 text-white px-6 py-3 rounded-xl font-bold hover:bg-green-900 transition-colors">
+                                    Cerrar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                // Agregar el enlace oculto
+                notification.appendChild(downloadLink);
+                
+                document.body.appendChild(notification);
+                
+                // Auto-remover después de 30 segundos
+                setTimeout(() => {
+                    if (document.body.contains(notification)) {
+                        document.body.removeChild(notification);
+                        URL.revokeObjectURL(url);
+                    }
+                }, 30000);
             },
             
             load: function() {
@@ -684,6 +783,50 @@
                     }
                 };
                 reader.readAsText(file);
+            },
+            
+            downloadUpdatedHTML: function() {
+                try {
+                    // Preparar los datos actuales
+                    const musicData = {
+                        albums: musicAlbums,
+                        timestamp: Date.now(),
+                        version: '3.0',
+                        totalAlbums: musicAlbums.length,
+                        totalTracks: musicAlbums.reduce((sum, album) => sum + album.tracks.length, 0)
+                    };
+                    
+                    // Codificar los datos
+                    const encodedData = btoa(JSON.stringify(musicData));
+                    
+                    // Obtener el HTML actual
+                    let currentHTML = document.documentElement.outerHTML;
+                    
+                    // Buscar y reemplazar los datos embebidos
+                    const dataRegex = /<script id="embedded-music-data"[^>]*>[\s\S]*?<\/script>/;
+                    const newDataScript = `<script id="embedded-music-data" type="application/json" style="display: none;">
+    ${encodedData}
+    </script>`;
+                    
+                    // Reemplazar los datos
+                    const updatedHTML = currentHTML.replace(dataRegex, newDataScript);
+                    
+                    // Crear y descargar el archivo
+                    const blob = new Blob([updatedHTML], { type: 'text/html;charset=utf-8' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `MusicStream-ConMusica-${new Date().toISOString().split('T')[0]}.html`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                    
+                    showNotification(`¡Archivo HTML descargado con ${musicAlbums.length} álbumes!`, 'success');
+                } catch (e) {
+                    console.error('Error al descargar HTML:', e);
+                    showNotification('Error al generar archivo HTML', 'error');
+                }
             },
             
             clear: function() {
@@ -1598,5 +1741,5 @@
             }
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'980f451c1000cc82',t:'MTc1ODE4MjAxMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'980f4e9d81c2b6eb',t:'MTc1ODE4MjM5OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
